@@ -1,0 +1,2 @@
+Link to wiki/internetissues -> "High Ping/Latency" section
+If you are getting a high ping please consult the following wiki entry: https://www.reddit.com/r/24hoursupport/wiki/internetissues#wiki_high_ping.2Flatency

@@ -1,0 +1,4 @@
+Link to wiki/obs
+If you want more information on how to setup OBS to record all the time and use instant replay, follow this wiki: https://www.reddit.com/r/24hoursupport/wiki/obs
+
+https://cdn.discordapp.com/attachments/514431063221731338/804179350374055997/4vlzpq.png

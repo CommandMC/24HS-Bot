@@ -1,0 +1,6 @@
+Explanation and video on how to re-apply thermal paste
+Reapplying thermalpaste:
+
+To clean off the old thermalpaste take something like a coffee filter or a napkin that won't leave residue and clean off the old thermalpaste from the CPU and the CPU cooler, then once both ends are clean and dry apply new thermalpaste, just a little drop at the center of the CPU, then connect the CPU cooler back and test the temps, for guide on how to do so issue a message with ?stress for a guide.
+
+For a video process see: https://youtu.be/kxoC61LB6GQ

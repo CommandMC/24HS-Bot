@@ -1,0 +1,2 @@
+Link to wiki/internetissues -> "Wi-Fi is unstable and disconnecting"
+If your Wifi is unstable please consult the following wiki entry: https://www.reddit.com/r/24hoursupport/wiki/internetissues#wiki_wi-fi_is_unstable_and_disconnecting

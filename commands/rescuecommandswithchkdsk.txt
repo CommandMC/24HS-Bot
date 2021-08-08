@@ -1,0 +1,46 @@
+Instructions for SFC/DISM scans with chkdsk
+Go to the start menu in the lower left hand corner of your screen, type in cmd, right click command prompt and click run as administrator
+
+**This command will ask you to reboot, reboot _after_ you are done with the last command**
+
+Type in:
+`chkdsk  C:  /f  /r  /x`
+               ^      ^       ^       ^
+           Spaces go here
+
+You will get this:
+```
+The type of the file system is NTFS.
+Cannot lock current drive.
+
+Chkdsk cannot run because the volume is in use by another
+process.  Would you like to schedule this volume to be
+checked the next time the system restarts? (Y/N)
+```
+Press Y
+
+Then enter.
+
+**DO NOT RESTART NOW. RESTART AFTER THE LAST COMMAND (DISM) IS COMPLETE**
+
+Once that is done (you will know it is done when it says "This volume will be checked the next time the system restarts." and you can type in other commands in the same exact command prompt) run this other command:
+
+Type in:
+`sfc  /scannow`
+         ^
+Space goes here
+
+Then enter 
+
+Once that is done (you will know it is done when you can type in other commands in the same exact command prompt) run this other command:
+Type in:
+
+`DISM  /Online  /Cleanup-Image  /RestoreHealth`
+          ^                   ^                                    ^
+                     Spaces go here
+
+Then enter 
+
+Once the command is done, restart
+
+https://cdn.discordapp.com/attachments/770131415530340363/788571887789146112/goawaystupidfiles.png

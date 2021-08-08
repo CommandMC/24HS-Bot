@@ -1,0 +1,2 @@
+Link to wiki/internetissues -> "WiFi network does not show up or WiFi won't turn on"
+If your Wifi network does not show up or your Wifi adapter does not seem to turn on please consult the following wiki entry: https://www.reddit.com/r/24hoursupport/wiki/internetissues#wiki_wifi_network_does_not_show_up_or_wifi_won.27t_turn_on

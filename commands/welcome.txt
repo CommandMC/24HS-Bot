@@ -1,0 +1,10 @@
+Welcome command explaining how to describe an issue
+Welcome! Please describe the issue you're experiencing as detailed as possible. Explain what you were trying to do and what happened instead. If you're getting any error messages, please include them. Do not say "I have tried everything", if you have tried everything there is nothing left to try, please mention **everything** you have tried to fix the issue to prevent repetition.
+
+In summary answer these questions: 
+
+1. What your issue is with any errors included
+
+2. Detailed step by step on what you have tried and looked up, do not omit anything, we don't want to have to repeat ourselves, this wastes time that can be spent trying things you already tried. 
+
+https://cdn.discordapp.com/attachments/514431063221731338/789405965967032370/4qu74s.png

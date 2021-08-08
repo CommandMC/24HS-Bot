@@ -1,0 +1,2 @@
+Link to wiki/soundissues
+If you are having sound issues, please consult the following wiki entry before asking for further help, as it contains common fixes: https://www.reddit.com/r/24hoursupport/wiki/soundissues

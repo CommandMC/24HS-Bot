@@ -1,0 +1,4 @@
+Link to clean booting google doc
+If you want more information to clean boot to eliminate the possibility of third party processes causing an issue, follow this wiki: https://docs.google.com/document/d/1wPulQmcFLtTr0qNk-qf2uPjJbMlRpwutdK61ZvhJoqc/edit?usp=sharing
+
+https://cdn.discordapp.com/attachments/514431063221731338/804178527451611156/remembertodothiscleanboot.png

@@ -1,0 +1,16 @@
+Bulk Crap Uninstaller, fully uninstall software
+You can use BCU (Bulk Crap Uninstaller) to fully uninstall software. 
+
+1. Download from the github repository: https://github.com/Klocman/Bulk-Crap-Uninstaller/releases/latest (Simply go to assets and do the one for setup.exe not portable.zip)
+
+2. Run the .exe as admin by right clicking it, if you get a "Windows protected your PC" window, click "More info" then "Run anyway"
+
+3. Run the standard installation, once installed, run BCU, in the welcome window just spam continue, everything can be left as default. 
+
+4. Select the application you wish to fully uninstall, then press continue, generally all options can be left as default. 
+
+5. When done with the normal uninstaller provided (if any) you will be asked to check for leftovers, do so and remove all found.
+
+6. Restart your computer
+
+7. (Optional) if you were doing this because the application you uninstalled is giving you issues and wish to fix it, then once you restarted your computer reinstall the application in question, be sure to download the latest installer from the application website instead of using one you already had downloaded.

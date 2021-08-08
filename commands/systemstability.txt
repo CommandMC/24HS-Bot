@@ -1,0 +1,2 @@
+Link to wiki/systemstability
+If you are having system stability issues, please consult the following wiki entry: https://www.reddit.com/r/24hoursupport/wiki/systemstability

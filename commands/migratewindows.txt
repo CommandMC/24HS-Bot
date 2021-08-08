@@ -1,0 +1,2 @@
+Link to wiki/migratingwindows
+While it is recommended to do a clean install, if you wish to migrate Windows to another drive please consult the following wiki entry: https://www.reddit.com/r/24hoursupport/wiki/migratingwindows
