@@ -150,6 +150,9 @@ def button_check(ctx, msg: Message) -> bool:
     # I hope this made sense
     if msg.id != ctx.message.id:
         return False
+    # Always allow button presses when in DMs/Groups
+    if not ctx.guild:
+        return True
     member: Member = ctx.guild.get_member(ctx.user.id)
     if not member:
         return False
