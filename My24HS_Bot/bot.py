@@ -20,29 +20,17 @@ class My24HSbot(Bot):
         self.logger = logging.getLogger('24HS-Bot')
 
     async def on_ready(self):
-        # Go through the commands
-        for file_or_folder in os.listdir(commands_dir):
-            if not os.path.isfile(os.path.join(commands_dir, file_or_folder)):
-                continue
-            filename, fileext = os.path.splitext(file_or_folder)
-            # The first line of the file is the command description, everything after that is the message that gets sent
-            with open(os.path.join(commands_dir, file_or_folder)) as f:
-                command_desc = f.readline()
-            # If there is actually a description (Discord errors out if there isn't AFAIK), add the command
-            # As to what happens when the command is ran, that's handled in 'handle_command'
-            if command_desc is not None:
-                self.shash_handler.add_slash_command(
-                    cmd=self.handle_command,
-                    name=filename,
-                    description=command_desc,
-                    guild_ids=list(guild.id for guild in self.guilds)
-                )
-        # Once all commands are added, push them to Discord
-        # This might not be necessary anymore, but I've found that without it some commands don't update immediately
-        await self.shash_handler.sync_all_commands()
+        # Add and sync slash commands
+        await self.sync_commands()
         # Add discord_components to the bot (to be able to use Buttons)
         DiscordComponents(self)
         self.logger.info('on_ready finished, logged in as {}'.format(self.user))
+
+    async def on_guild_join(self):
+        await self.sync_commands()
+
+    async def on_guild_remove(self):
+        await self.sync_commands()
 
     async def on_message(self, message: discord.Message):
         # Ignore special messages (like member joins or nitro boosts)
@@ -112,6 +100,28 @@ class My24HSbot(Bot):
         )
         self.logger.info('Parsed sysinfo file in #{} (sent by {})'.format(message.channel, message.author))
         await msg.delete()
+
+    async def sync_commands(self):
+        # Go through the commands
+        for file_or_folder in os.listdir(commands_dir):
+            if not os.path.isfile(os.path.join(commands_dir, file_or_folder)):
+                continue
+            filename, fileext = os.path.splitext(file_or_folder)
+            # The first line of the file is the command description, everything after that is the message that gets sent
+            with open(os.path.join(commands_dir, file_or_folder)) as f:
+                command_desc = f.readline()
+            # If there is actually a description (Discord errors out if there isn't AFAIK), add the command
+            # As to what happens when the command is ran, that's handled in 'handle_command'
+            if command_desc is not None:
+                self.shash_handler.add_slash_command(
+                    cmd=self.handle_command,
+                    name=filename,
+                    description=command_desc,
+                    guild_ids=list(guild.id for guild in self.guilds)
+                )
+        # Once all commands are added, push them to Discord
+        # This might not be necessary anymore, but I've found that without it some commands don't update immediately
+        await self.shash_handler.sync_all_commands()
 
     def get_command_resp(self, command: str):
         self.logger.debug('Getting command response for {}'.format(command))
