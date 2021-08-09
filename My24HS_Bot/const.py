@@ -11,7 +11,7 @@ sysinfo_allowed_roles = [
     # Feel Free to Ping in 24HS
     421504795988197377,
     # Helpdesk in Nvidia
-    566274374014074886
+    835499098886504509
 ]
 # Color of the left bar in an Embed. Dark Red kinda fits the profile picture
 embed_color = Color.dark_red()
