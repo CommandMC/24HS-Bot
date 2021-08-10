@@ -3,19 +3,19 @@ from io import StringIO, BytesIO
 from discord import Embed
 
 from My24HS_Bot.const import w10_build_to_version, latest_nvidia_version, embed_color, \
-    system_manufacturer_unknown_values
+    system_manufacturer_unknown_values, w11_build_to_version
 
 
-def w10_build_version_check(build_num: str) -> tuple[bool, str, str]:
-    if build_num not in w10_build_to_version:
+def build_version_check(build_num: str, build_to_version: dict) -> tuple[bool, str, str]:
+    if build_num not in build_to_version:
         raise ValueError('The build number supplied ({}) does not exist'.format(build_num))
-    version_name: str = w10_build_to_version[build_num]
-    latest_version_build = list(w10_build_to_version.keys())[-1]
+    version_name: str = build_to_version[build_num]
+    latest_version_build = list(build_to_version.keys())[-1]
     if build_num == latest_version_build:
         # If the latest build number and the supplied build number match, we can just
         # return the current version name as the most recent
         return True, version_name, version_name
-    return False, version_name, list(w10_build_to_version.values())[-1]
+    return False, version_name, list(build_to_version.values())[-1]
 
 
 def convert_utf16_utf8(fd: BytesIO) -> StringIO:
@@ -55,16 +55,22 @@ def parse_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
         description=''
     )
 
-    for i in range(6):
+    for i in range(5):
         fd.readline()
 
+    os_name = fd.readline().split('\t')[1]
     windows_version = fd.readline().split('\t')[1]
     windows_build = windows_version.split(' ')[-1]
-    try:
-        is_up_to_date, current_version, latest_version = w10_build_version_check(windows_build)
-    except ValueError:
+
+    if os_name.startswith('Microsoft Windows 10'):
+        is_up_to_date, current_version, latest_version = build_version_check(windows_build, w10_build_to_version)
+    elif os_name.startswith('Microsoft Windows 11'):
+        is_up_to_date, current_version, latest_version = build_version_check(windows_build, w11_build_to_version)
+        current_version = '**W11**-' + current_version
+    else:
         is_up_to_date = True
-        current_version = 'Unknown'
+        current_version = 'Unsupported, W7?'
+
     if not is_up_to_date:
         info.add_field(
             name='Windows version',

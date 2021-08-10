@@ -11,7 +11,9 @@ sysinfo_allowed_roles = [
     # Feel Free to Ping in 24HS
     421504795988197377,
     # Helpdesk in Nvidia
-    835499098886504509
+    835499098886504509,
+    # Admin role in my test server
+    566274374014074886
 ]
 # Color of the left bar in an Embed. Dark Red kinda fits the profile picture
 embed_color = Color.dark_red()
@@ -43,4 +45,8 @@ w10_build_to_version = {
     '19041': '2004',
     '19042': '20H2',
     '19043': '21H1'
+}
+
+w11_build_to_version = {
+    '22000': '21H2'
 }
