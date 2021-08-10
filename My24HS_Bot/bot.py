@@ -3,7 +3,7 @@ import discord
 import discord_slash
 import logging
 import os
-from discord import File, Message, Member
+from discord import File, Message, Member, Guild
 from discord.ext.commands import Bot, Context
 from discord_components import DiscordComponents, Button, ButtonStyle, InteractionType
 from io import BytesIO, StringIO
@@ -26,10 +26,12 @@ class My24HSbot(Bot):
         DiscordComponents(self)
         self.logger.info('on_ready finished, logged in as {}'.format(self.user))
 
-    async def on_guild_join(self):
+    async def on_guild_join(self, guild: Guild):
+        self.logger.info('Joined a guild! {}'.format(guild.name))
         await self.sync_commands()
 
-    async def on_guild_remove(self):
+    async def on_guild_remove(self, guild: Guild):
+        self.logger.info('Left a guild! {}'.format(guild.name))
         await self.sync_commands()
 
     async def on_message(self, message: discord.Message):
