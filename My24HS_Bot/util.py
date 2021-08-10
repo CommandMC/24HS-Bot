@@ -31,7 +31,7 @@ def is_sysinfo(fd: StringIO) -> bool:
     # to detect if this is actually a sysinfo file
 
     # Discard the first 5 lines
-    for _ in range(5):
+    for i in range(5):
         fd.readline()
     # Read out the 6th line
     os_name_line = fd.readline()
@@ -55,7 +55,7 @@ def parse_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
         description=''
     )
 
-    for _ in range(6):
+    for i in range(6):
         fd.readline()
 
     windows_version = fd.readline().split('\t')[1]
@@ -77,7 +77,7 @@ def parse_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
             value=':white_check_mark: Up to date ({})'.format(current_version)
         )
 
-    for _ in range(3):
+    for i in range(3):
         fd.readline()
     system_manufacturer = fd.readline().split('\t')[1]
     system_model = fd.readline().split('\t')[1]
@@ -102,7 +102,7 @@ def parse_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
         value=system_model
     )
 
-    for _ in range(2):
+    for i in range(2):
         fd.readline()
     processor = fd.readline().split('\t')[1].split(',')[0]
     info.add_field(
@@ -116,7 +116,7 @@ def parse_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
         value=bios_info
     )
 
-    for _ in range(16):
+    for i in range(16):
         fd.readline()
     ram_capacity = fd.readline().split('\t')[1]
     info.add_field(
@@ -130,7 +130,7 @@ def parse_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
         curr_line = fd.readline()
         if curr_line.startswith('['):
             i += 1
-    for _ in range(2):
+    for i in range(2):
         fd.readline()
     # We're accounting for multi-GPU systems by creating lists here
     gpunames: list[str] = []
