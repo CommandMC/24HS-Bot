@@ -2,7 +2,8 @@ from io import StringIO, BytesIO
 
 from discord import Embed
 
-from My24HS_Bot.const import w10_build_to_version, latest_nvidia_version, embed_color
+from My24HS_Bot.const import w10_build_to_version, latest_nvidia_version, embed_color, \
+    system_manufacturer_unknown_values
 
 
 def w10_build_version_check(build_num: str) -> tuple[bool, str, str]:
@@ -79,15 +80,23 @@ def parse_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
     for _ in range(3):
         fd.readline()
     system_manufacturer = fd.readline().split('\t')[1]
-    if system_manufacturer == 'To Be Filled By O.E.M.':
-        system_manufacturer = 'Unknown'
+    system_model = fd.readline().split('\t')[1]
+    if system_manufacturer in system_manufacturer_unknown_values:
+        # Skip ahead to "BaseBoard Manufacturer"
+        for i in range(7):
+            fd.readline()
+        # Replace the system values with the baseboard values
+        system_manufacturer = fd.readline().split('\t')[1]
+        system_model = fd.readline().split('\t')[1]
+        # Return back to L13
+        fd.seek(0)
+        for i in range(12):
+            fd.readline()
+
     info.add_field(
         name='System Manufacturer',
         value=system_manufacturer
     )
-    system_model = fd.readline().split('\t')[1]
-    if system_model == 'To Be Filled By O.E.M.':
-        system_model = 'Unknown'
     info.add_field(
         name='System Model',
         value=system_model

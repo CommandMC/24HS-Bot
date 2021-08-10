@@ -25,6 +25,10 @@ def download_latest_nvidia_version() -> str:
         raise ConnectionError
 
 
+system_manufacturer_unknown_values = [
+    'To Be Filled By O.E.M.',
+    'System manufacturer'
+]
 latest_nvidia_version = download_latest_nvidia_version()
 w10_build_to_version = {
     '10240': '1507',
