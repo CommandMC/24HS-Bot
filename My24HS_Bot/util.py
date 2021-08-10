@@ -40,7 +40,7 @@ def is_sysinfo(fd: StringIO) -> bool:
     # If we don't have a 2nd element (-> no tabs in line), we also know this can't be a sysinfo file
     except IndexError:
         return False
-    return os_name.startswith('Microsoft Windows 10')
+    return os_name.startswith('Microsoft Windows 1')
 
 
 def parse_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
@@ -59,7 +59,11 @@ def parse_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
 
     windows_version = fd.readline().split('\t')[1]
     windows_build = windows_version.split(' ')[-1]
-    is_up_to_date, current_version, latest_version = w10_build_version_check(windows_build)
+    try:
+        is_up_to_date, current_version, latest_version = w10_build_version_check(windows_build)
+    except ValueError:
+        is_up_to_date = True
+        current_version = 'Unknown'
     if not is_up_to_date:
         info.add_field(
             name='Windows version',
