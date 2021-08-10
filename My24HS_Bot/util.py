@@ -68,7 +68,7 @@ def parse_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
         is_up_to_date, current_version, latest_version = build_version_check(windows_build, w11_build_to_version)
         current_version = '**W11**-' + current_version
     else:
-        is_up_to_date = True
+        is_up_to_date = False
         current_version = 'Unsupported, W7?'
 
     if not is_up_to_date:
