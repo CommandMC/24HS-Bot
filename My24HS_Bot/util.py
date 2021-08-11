@@ -104,6 +104,7 @@ def handle_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
         fd.readline()
     # If TPM is in here, there was an error with it, so it's not supported
     tpm_available = 'TPM' not in fd.readline().split('\t')[1]
+    parser.logger.info('TPM is {}supported'.format('' if tpm_available else 'not '))
 
     tpm_version = 'Unknown'
     if tpm_available:

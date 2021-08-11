@@ -1,3 +1,5 @@
+import logging
+
 from discord import Embed
 
 from My24HS_Bot.const import w10_build_to_version, w11_build_to_version, latest_nvidia_version, embed_color
@@ -14,6 +16,7 @@ class SysinfoParser:
             colour=embed_color,
             description=''
         )
+        self.logger = logging.getLogger('SysinfoParser')
 
     def windows_version(self, os_name: str, windows_build: str):
         if os_name.startswith('Microsoft Windows 10'):
@@ -28,12 +31,15 @@ class SysinfoParser:
         if not is_up_to_date:
             self.add_info('Windows version', ':x: Not up to date ({})'.format(current_version))
             self.quickfixes.description += '`/systemuptodate`\n - Update Windows\n'
-        else:
-            self.add_info('Windows version', ':white_check_mark: Up to date ({})'.format(current_version))
+            self.logger.info('Windows version {}, not up to date'.format(current_version))
+            return
+        self.add_info('Windows version', ':white_check_mark: Up to date ({})'.format(current_version))
+        self.logger.info('Windows version {}, up to date'.format(current_version))
 
     def ram_capacity(self, ram_capacity: str):
         ram_capacity = ram_capacity.replace(',', '.')
         ram_capacity_gb = int(ram_capacity.split('.')[0])
+        self.logger.info('RAM Capacity: {} GB'.format(ram_capacity_gb))
         if ram_capacity_gb < 8:
             self.add_info('RAM Capacity', ':warning: {} GB'.format(ram_capacity_gb))
             return
@@ -77,8 +83,12 @@ class SysinfoParser:
                 if '`/systemuptodate`' not in self.quickfixes.description:
                     self.quickfixes.description += '`/systemuptodate`\n'
                 self.quickfixes.description += ' - Update GPU drivers\n'
+            self.logger.info('Added GPU {}, driver version {}, up to date? {}'.format(
+                gpuname, gpu_ver_string, gpu_outdated
+            ))
 
     def add_info(self, name: str, value: str):
+        self.logger.debug('Adding info {}, value {}'.format(name, value))
         self.info.add_field(name=name, value=value)
 
 
