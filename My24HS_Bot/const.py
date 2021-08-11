@@ -8,6 +8,10 @@ bot_token = 'INSERT_TOKEN_HERE'
 commands_dir = os.path.join(os.path.curdir, 'commands')
 # These roles are allowed to press the "Yes/No" buttons on the sysinfo prompt
 sysinfo_allowed_roles = [
+    # Members in Nvidia
+    185774676969127936,
+    # Mods in 24HS
+    370559677949280257, 
     # Feel Free to Ping in 24HS
     421504795988197377,
     # Helpdesk in Nvidia
