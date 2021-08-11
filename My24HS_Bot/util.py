@@ -2,20 +2,19 @@ from io import StringIO, BytesIO
 
 from discord import Embed
 
-from My24HS_Bot.const import w10_build_to_version, latest_nvidia_version, embed_color, \
-    system_manufacturer_unknown_values, w11_build_to_version
+from My24HS_Bot.const import system_manufacturer_unknown_values, system_model_unknown_values
+from My24HS_Bot.sysinfo_parsing import SysinfoParser
 
 
-def build_version_check(build_num: str, build_to_version: dict) -> tuple[bool, str, str]:
-    if build_num not in build_to_version:
-        raise ValueError('The build number supplied ({}) does not exist'.format(build_num))
-    version_name: str = build_to_version[build_num]
-    latest_version_build = list(build_to_version.keys())[-1]
-    if build_num == latest_version_build:
-        # If the latest build number and the supplied build number match, we can just
-        # return the current version name as the most recent
-        return True, version_name, version_name
-    return False, version_name, list(build_to_version.values())[-1]
+def go_to_section(fd: StringIO, section: int):
+    fd.seek(0)
+    i = 0
+    while i < section:
+        curr_line = fd.readline()
+        if curr_line.startswith('['):
+            i += 1
+    for i in range(2):
+        fd.readline()
 
 
 def convert_utf16_utf8(fd: BytesIO) -> StringIO:
@@ -44,16 +43,8 @@ def is_sysinfo(fd: StringIO) -> bool:
     return os_name.startswith('Microsoft Windows 1')
 
 
-def parse_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
-    info = Embed(
-        title=':information_source: System Information',
-        colour=embed_color
-    )
-    quickfixes = Embed(
-        title=':tools: Quick Fixes',
-        colour=embed_color,
-        description=''
-    )
+def handle_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
+    parser = SysinfoParser()
 
     for i in range(5):
         fd.readline()
@@ -61,87 +52,80 @@ def parse_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
     os_name = fd.readline().split('\t')[1]
     windows_version = fd.readline().split('\t')[1]
     windows_build = windows_version.split(' ')[-1]
-
-    if os_name.startswith('Microsoft Windows 10'):
-        is_up_to_date, current_version, latest_version = build_version_check(windows_build, w10_build_to_version)
-    elif os_name.startswith('Microsoft Windows 11'):
-        is_up_to_date, current_version, latest_version = build_version_check(windows_build, w11_build_to_version)
-        current_version = '**W11**-' + current_version
-    else:
-        is_up_to_date = False
-        current_version = 'Unsupported, W7?'
-
-    if not is_up_to_date:
-        info.add_field(
-            name='Windows version',
-            value=':x: Not up to date ({})'.format(current_version)
-        )
-        quickfixes.description += '`/systemuptodate`\n - Update Windows\n'
-    else:
-        info.add_field(
-            name='Windows version',
-            value=':white_check_mark: Up to date ({})'.format(current_version)
-        )
+    parser.windows_version(os_name, windows_build)
 
     for i in range(3):
         fd.readline()
     system_manufacturer = fd.readline().split('\t')[1]
+    system_manufacturer_unknown = system_manufacturer in system_manufacturer_unknown_values
+    if not system_manufacturer_unknown:
+        parser.add_info('System Manufacturer', system_manufacturer)
     system_model = fd.readline().split('\t')[1]
-    if system_manufacturer in system_manufacturer_unknown_values:
-        # Skip ahead to "BaseBoard Manufacturer"
-        for i in range(7):
-            fd.readline()
-        # Replace the system values with the baseboard values
-        system_manufacturer = fd.readline().split('\t')[1]
-        system_model = fd.readline().split('\t')[1]
-        # Return back to L13
-        fd.seek(0)
-        for i in range(12):
-            fd.readline()
-
-    info.add_field(
-        name='System Manufacturer',
-        value=system_manufacturer
-    )
-    info.add_field(
-        name='System Model',
-        value=system_model
-    )
+    system_model_unknown = system_model in system_model_unknown_values
+    if not system_model_unknown:
+        parser.add_info('System Model', system_model)
 
     for i in range(2):
         fd.readline()
     processor = fd.readline().split('\t')[1].split(',')[0]
-    info.add_field(
-        name='Processor',
-        value=processor
-    )
-
     bios_info = fd.readline().split('\t')[1]
-    info.add_field(
-        name='BIOS Version & Date',
-        value=bios_info
-    )
+    # Don't add them yet, they'll be added once BaseBoard is read out
+    if not (system_manufacturer_unknown or system_model_unknown):
+        parser.add_info('Processor', processor)
+        parser.add_info('BIOS Version & Date', bios_info)
 
-    for i in range(16):
+    # If the System Manufacturer or the System Model is deemed unknown/unhelpful, read out BaseBoard instead
+    if system_manufacturer_unknown or system_model_unknown:
+        for i in range(3):
+            fd.readline()
+        if system_manufacturer_unknown:
+            baseboard_manufacturer = fd.readline().split('\t')[1]
+            parser.add_info('System Manufacturer', baseboard_manufacturer)
+        else:
+            fd.readline()
+        if system_model_unknown:
+            baseboard_product = fd.readline().split('\t')[1]
+            parser.add_info('System Model', baseboard_product)
+        else:
+            fd.readline()
+        # And now we add the CPU and BIOS info
+        parser.add_info('Processor', processor)
+        parser.add_info('BIOS Version & Date', bios_info)
+    else:
+        for i in range(5):
+            fd.readline()
+
+    for i in range(11):
         fd.readline()
     ram_capacity = fd.readline().split('\t')[1]
-    info.add_field(
-        name='RAM Capacity',
-        value=ram_capacity
-    )
+    parser.ram_capacity(ram_capacity)
 
-    # Skip to the "[Display]" section of the sysinfo by counting how many sections we pass
-    i = 0
-    while i < 14:
-        curr_line = fd.readline()
-        if curr_line.startswith('['):
-            i += 1
-    for i in range(2):
+    for i in range(8):
         fd.readline()
+    # If TPM is in here, there was an error with it, so it's not supported
+    tpm_available = 'TPM' not in fd.readline().split('\t')[1]
+
+    tpm_version = 'Unknown'
+    if tpm_available:
+        # Go to [Memory]
+        go_to_section(fd, 8)
+        for line in fd:
+            if line.startswith('['):
+                break
+            device = line.split('\t')[1]
+            if device.startswith('Trusted Platform Module'):
+                tpm_version = device.split(' ')[-1]
+                break
+    parser.add_info('TPM Version', ':white_check_mark: ' + tpm_version if tpm_available else ':x: Not supported')
+
+    # Go to [Display]
+    go_to_section(fd, 15)
+
     # We're accounting for multi-GPU systems by creating lists here
     gpunames: list[str] = []
     gpuversions: list[str] = []
-    while True:
+    gpu_done = False
+    while not gpu_done:
         gpunames.append(fd.readline().split('\t')[1])
         for i in range(5):
             fd.readline()
@@ -151,48 +135,18 @@ def parse_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
             gpu_driver_version = gpu_driver_version.replace('.', '')[-5:]
             gpu_driver_version = gpu_driver_version[0:3] + '.' + gpu_driver_version[3:]
         gpuversions.append(gpu_driver_version)
-        for i in range(10):
-            fd.readline()
-        if not fd.readline().startswith('\t\t'):
-            break
+        for line in fd:
+            # Two tabs are used to indicate that there's another GPU installed.
+            # If that's the case, run the while-Loop again to add the next GPU
+            if line.startswith('\t\t'):
+                break
+            # If [ is encountered, the next section was reached. If that's the case, we're done with listing GPUs
+            if line.startswith('['):
+                gpu_done = True
+                break
 
     # Add all detected GPUs to the system info embed
-    for i in range(len(gpunames)):
-        gpuname = gpunames[i]
-        info.add_field(
-            # If we only have one GPU to display, it would be redundant to add a " 1" behind it
-            name='GPU {}'.format(i + 1) if len(gpunames) != 1 else 'GPU',
-            value=gpuname
-        )
-
-        gpu_outdated = False
-        # GPU driver update checking is currently only possible on NVIDIA GPUs
-        if gpuname.startswith('NVIDIA'):
-            if gpuversions[i] == latest_nvidia_version:
-                gpu_ver_string = ':white_check_mark: Up to date ({})'.format(gpuversions[i])
-            else:
-                gpu_ver_string = ':x: Not up to date ({})'.format(gpuversions[i])
-                gpu_outdated = True
-        else:
-            gpu_ver_string = gpuversions[i]
-
-        info.add_field(
-            name='Driver Version',
-            value=gpu_ver_string
-        )
-
-        # Add an empty 3rd field, since otherwise the ordering would look weird with more than one GPU installed
-        info.add_field(
-            name='\u200b',
-            value='\u200b'
-        )
-
-        # If the GPU driver we're currently looking at is outdated and the
-        # update notice is not yet in the quick fixes, add it
-        if gpu_outdated and ' - Update GPU drivers' not in quickfixes.description:
-            if '`/systemuptodate`' not in quickfixes.description:
-                quickfixes.description += '`/systemuptodate`\n'
-            quickfixes.description += ' - Update GPU drivers\n'
+    parser.add_gpus(gpunames, gpuversions)
 
     fd.seek(0)
-    return info, quickfixes
+    return parser.info, parser.quickfixes

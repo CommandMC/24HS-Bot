@@ -9,7 +9,7 @@ from discord_components import DiscordComponents, Button, ButtonStyle, Interacti
 from io import BytesIO, StringIO
 
 from My24HS_Bot.const import commands_dir, sysinfo_allowed_roles
-from My24HS_Bot.util import parse_sysinfo, is_sysinfo, convert_utf16_utf8
+from My24HS_Bot.util import handle_sysinfo, is_sysinfo, convert_utf16_utf8
 
 
 # Python doesn't allow classes to start with a number, so we have to add a "My" to the start of this
@@ -84,7 +84,7 @@ class My24HSbot(Bot):
         await interaction.respond(
             type=InteractionType.DeferredUpdateMessage
         )
-        info, quickdiagnosis = parse_sysinfo(utf8_sysinfo)
+        info, quickdiagnosis = handle_sysinfo(utf8_sysinfo)
         file_to_attach = File(
             fp=utf8_sysinfo,
             filename='.'.join(attachment.filename.split('.')[:-1]) + '_utf8.txt'
