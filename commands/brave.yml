@@ -1,0 +1,6 @@
+description: Link to the Brave section of productstoavoid
+has_inline: true
+message:
+ - "You should not UNDER ANY CONDITION use the Brave browser! "
+ - text: More info on the Wiki
+   link: https://old.reddit.com/r/24hoursupport/wiki/productstoavoid#wiki_brave

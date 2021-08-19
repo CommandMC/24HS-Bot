@@ -1,4 +1,0 @@
-Link to wiki/index -> RAM Diagnostics
-For running memtest86, please consult the following wiki entry: https://www.reddit.com/r/24hoursupport/wiki/index#wiki_ram_diagnostics
-
-https://cdn.discordapp.com/attachments/514431063221731338/812757321629040660/4yt3gn.jpg

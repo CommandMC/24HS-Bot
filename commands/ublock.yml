@@ -1,0 +1,28 @@
+description: Explanation on how to install Ublock, Sponsorblock and YT Vanced
+has_inline: true
+message:
+ - "You should uninstall all other adblocker software and switch to "
+ - text: uBlock Origin
+   link: https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/
+ - |-
+    Click on the extension icon and open the dashboard/settings. Go to Filter lists, expand all the lists and enable ALL OF THEM but experimental and languages (unless you are in a country that speaks another language besides english) and once you expanded and selected all the filter lists, go to the top and click Purge all Caches, and then Update now. Let it update for a few minutes, once it's done you are all good. If you ever get ads again simply go to the dashboard again, and click Purge all caches and Update now.
+    
+    To also get rid of sponsorships (and other unwanted content) inside Youtube videos, install 
+ - text: Sponsorblock
+   link: https://addons.mozilla.org/en-US/firefox/addon/sponsorblock/
+ - |-
+    .
+    
+    On Android, if you install Firefox you can install uBlock Origin in it. As for YouTube, install 
+ - text: Youtube Vanced
+   link: https://github.com/YTVanced/VancedManager
+ - |-
+    , which is a modified version of the Youtube app with integrated Ad-Blocking and Sponsorblock.
+    
+    To enable Sponsorblock in Android:
+    
+    1. Install Vanced
+    2. Launch and tap on your profile on the top right, then go to settings
+    3. Scroll down to Sponsorblock settings and enable it. 
+    
+    Enjoy no ads!

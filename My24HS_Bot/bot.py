@@ -3,12 +3,14 @@ import discord
 import discord_slash
 import logging
 import os
-from discord import File, Message, Member, Guild
+import yaml
+from discord import File, Message, Member, Guild, Embed
 from discord.ext.commands import Bot, Context
 from discord_components import DiscordComponents, Button, ButtonStyle, InteractionType
+from discord_slash.utils.manage_commands import create_option
 from io import BytesIO, StringIO
 
-from My24HS_Bot.const import commands_dir, sysinfo_allowed_roles
+from My24HS_Bot.const import commands_dir, sysinfo_allowed_roles, embed_color, attachments_dir
 from My24HS_Bot.util import handle_sysinfo, is_sysinfo, convert_utf16_utf8
 
 
@@ -18,6 +20,7 @@ class My24HSbot(Bot):
         super().__init__(**options)
         self.shash_handler = discord_slash.SlashCommand(self)
         self.logger = logging.getLogger('24HS-Bot')
+        self.commands_list: dict = {}
 
     async def on_ready(self):
         # Add and sync slash commands
@@ -108,40 +111,132 @@ class My24HSbot(Bot):
         for file_or_folder in os.listdir(commands_dir):
             if not os.path.isfile(os.path.join(commands_dir, file_or_folder)):
                 continue
+
             filename, fileext = os.path.splitext(file_or_folder)
-            # The first line of the file is the command description, everything after that is the message that gets sent
+            if fileext != '.yml':
+                continue
+
             with open(os.path.join(commands_dir, file_or_folder)) as f:
-                command_desc = f.readline()
-            # If there is actually a description (Discord errors out if there isn't AFAIK), add the command
-            # As to what happens when the command is ran, that's handled in 'handle_command'
-            if command_desc is not None:
-                self.shash_handler.add_slash_command(
-                    cmd=self.handle_command,
-                    name=filename,
-                    description=command_desc,
-                    guild_ids=list(guild.id for guild in self.guilds)
-                )
+                self.commands_list[filename] = yaml.safe_load(f)
+
+        for command_name, command_info in self.commands_list.items():
+            if command_info.get('copy_of'):
+                self.logger.debug('Command {} is a copy of {}'.format(command_name, command_info.get('copy_of')))
+                command_info = self.commands_list[command_info.get('copy_of')]
+
+            # If the description is empty or not a string, we can't add the command
+            if not command_info.get('description') or type(command_info.get('description')) is not str:
+                self.logger.error('Cannot add command /{}, no description'.format(command_name))
+                continue
+
+            self.shash_handler.add_slash_command(
+                cmd=self.handle_command,
+                name=command_name,
+                description=command_info.get('description'),
+                guild_ids=list(guild.id for guild in self.guilds),
+                # FIXME: Even if commands don't have inline links, the option still gets added. No idea why
+                options=[
+                    create_option(
+                        name='noinline',
+                        description='Disable inline links in message',
+                        option_type=5,
+                        required=False
+                    )
+                ] if command_info.get('has_inline', False) else None
+            )
         # Once all commands are added, push them to Discord
         # This might not be necessary anymore, but I've found that without it some commands don't update immediately
         await self.shash_handler.sync_all_commands()
 
-    def get_command_resp(self, command: str):
-        self.logger.debug('Getting command response for {}'.format(command))
-        file_path = os.path.join(commands_dir, command + '.txt')
-        if not os.path.isfile(file_path):
-            logging.warning('Command ' + command + ' does not exist!')
-            return
-        with open(file_path) as f:
-            # The first line of the file is the description, so we'll return every line after that
-            return f.readlines()[1:]
+    def get_command_resp(self, command: str, noinline: bool) -> tuple[(str, None), (Embed, None), list[File]]:
+        if command not in self.commands_list:
+            self.logger.error('Command /{} does not exist. This should be impossible!'.format(command))
+            return None, Embed(), []
 
-    async def handle_command(self, ctx: Context):
+        command_info: dict = self.commands_list[command]
+
+        # If the command is a copy of another command, run this function with the actual command
+        if command_info.get('copy_of'):
+            self.logger.info('Command /{} is a copy of /{}, re-running function with that command'.format(
+                command, command_info.get('copy_of')
+            ))
+            return self.get_command_resp(command_info.get('copy_of'), noinline)
+
+        # If we have attachments for this command, read them out and collect them in a list
+        files_to_attach: list[File] = []
+        if os.path.isdir(os.path.join(attachments_dir, command)):
+            for file_or_folder in os.listdir(os.path.join(attachments_dir, command)):
+                if not os.path.isfile(os.path.join(os.path.join(attachments_dir, command), file_or_folder)):
+                    continue
+                files_to_attach.append(File(fp=os.path.join(os.path.join(attachments_dir, command), file_or_folder)))
+
+        # If we don't have a main 'message' component, we don't have to do any formatting
+        if not command_info.get('message'):
+            return command_info.get('raw_message'), None, files_to_attach
+
+        embed = Embed(description='', colour=embed_color)
+        # If we don't have inline links, we don't have to look at 'noinline' at all
+        if not command_info.get('has_inline', False):
+            # We can only either have a string or a list of strings here. If we have just one string, set that as the
+            # description. If we have multiple, join them together
+            if type(command_info.get('message')) is str:
+                embed_description = command_info.get('message')
+            else:
+                embed_description = ''.join(command_info.get('message'))
+        else:
+            # This shouldn't happen (since if we only have a string, the command can't have inline links since those
+            # are dicts), but we'll handle it anyways
+            if type(command_info.get('message')) is str:
+                embed_description = command_info.get('message')
+            # If we only have one embed link as the message, set that
+            elif type(command_info.get('message')) is dict:
+                if noinline:
+                    embed_description = '{}: {}'
+                else:
+                    embed_description = '[{}]({})'
+                embed_description = embed_description.format(
+                        command_info.get('message').get('text'), command_info.get('message').get('link')
+                    )
+            else:
+                embed_description = ''
+                for message_part in command_info.get('message'):
+                    if type(message_part) is str:
+                        embed_description += message_part
+                    else:
+                        if noinline:
+                            part_to_add = '{}: {}'
+                        else:
+                            part_to_add = '[{}]({})'
+                        embed_description += part_to_add.format(
+                            message_part.get('text'), message_part.get('link')
+                        )
+        embed.description = embed_description
+        return command_info.get('raw_message'), embed, files_to_attach
+
+    async def handle_command(self, ctx: Context, noinline: bool = False):
         self.logger.info('{} used /{} in #{}'.format(ctx.author, ctx.command, ctx.channel))
-        response = self.get_command_resp(ctx.command)
-        if response:
-            await ctx.send(''.join(response))
+        message, embed, attachments = self.get_command_resp(ctx.command, noinline)
+        # If we have neither a message nor an embed, only send the attachments (if any)
+        if not message and not embed:
+            if attachments:
+                await ctx.send(
+                    files=attachments
+                )
+            else:
+                await ctx.send(
+                    content='There was an error processing this command.'
+                )
             return
-        await ctx.send('No response found')
+        await ctx.send(
+            content=message,
+            embed=embed
+        )
+        # Send the attachments as a seperate message, since otherwise they get displayed above the embed and that
+        # looks weird
+        if attachments:
+            await ctx.channel.send(
+                files=attachments
+            )
 
 
 def button_check(ctx, msg: Message) -> bool:

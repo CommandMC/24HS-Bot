@@ -1,0 +1,6 @@
+description: Link to ddu google doc
+has_inline: true
+message:
+ - "For Display Driver Uninstaller (DDU) guide please consult "
+ - text: this Wiki entry
+   link: https://docs.google.com/document/d/10cY1eNt3o_BpTHLtOsS3CkCXa3ugejCygNJqpohbRkc/edit?usp=sharing

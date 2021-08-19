@@ -1,4 +1,0 @@
-Link to wiki/seeingifhardwareorsoftware
-If you wish to see if a problem is related to your hardware or software, you can try booting into a Manjaro USB and see if you can reproduce the issue there: https://www.reddit.com/r/24hoursupport/wiki/seeingifhardwareorsoftware
-
-https://cdn.discordapp.com/attachments/514431063221731338/788536573578313748/2Q.png

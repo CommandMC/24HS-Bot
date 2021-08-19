@@ -1,0 +1,13 @@
+description: Links to wiki/desktopwillnotturnon and wiki -> "Laptop Won't Power On"
+has_inline: true
+message:
+ - |-
+    If your computer is not turning on, please consult one of the corresponding Wiki entries:
+    • 
+ - text: Desktop won't turn on
+   link: https://old.reddit.com/r/24hoursupport/wiki/desktopwillnotturnon
+ - |-
+    
+    • 
+ - text: Laptop won't turn on
+   link: https://old.reddit.com/r/24hoursupport/wiki/index#wiki_laptop_won.27t_power_on

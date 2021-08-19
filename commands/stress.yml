@@ -1,0 +1,15 @@
+description: Link to CPU and GPU stress test wiki entries
+has_inline: true
+message:
+ - |-
+    If you wish to stress test the following components, please consult the corresponding wiki entry:
+    
+    
+ - text: CPU
+   link: https://old.reddit.com/r/24hoursupport/wiki/index#wiki_cpu_stress_tests
+ - |-
+    
+    
+    
+ - text: GPU
+   link: https://old.reddit.com/r/24hoursupport/wiki/index#wiki_graphics_card_stress_testing

@@ -1,0 +1,6 @@
+description: Link to wiki/internetissues -> "High Ping/Latency" section
+has_inline: true
+message:
+ - "If you are getting a high ping please consult "
+ - text: this Wiki entry
+   link: https://old.reddit.com/r/24hoursupport/wiki/internetissues#wiki_high_ping.2Flatency

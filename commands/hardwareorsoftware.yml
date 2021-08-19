@@ -1,0 +1,6 @@
+description: Link to wiki/seeingifhardwareorsoftware
+has_inline: true
+message:
+ - "If you wish to see if a problem is related to your hardware or software, you can try booting into a Manjaro USB and see if you can reproduce the issue there. Please follow "
+ - text: this Wiki entry
+   link: https://old.reddit.com/r/24hoursupport/wiki/seeingifhardwareorsoftware

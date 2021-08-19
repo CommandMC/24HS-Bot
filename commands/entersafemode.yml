@@ -1,0 +1,6 @@
+description: Link to wiki/enteringsafemode
+has_inline: true
+message:
+ - "For more information on how to enter safe mode (even if you cannot boot) please consult "
+ - text: this Wiki entry
+   link: https://old.reddit.com/r/24hoursupport/wiki/enteringsafemode

@@ -1,0 +1,6 @@
+description: Link to wiki/index -> RAM Diagnostics
+has_inline: true
+message:
+ - "For running memtest86, please consult "
+ - text: this Wiki entry
+   link: https://old.reddit.com/r/24hoursupport/wiki/index#wiki_ram_diagnostics

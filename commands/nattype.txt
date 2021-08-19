@@ -1,2 +1,0 @@
-Link to wiki/internetissues -> NAT TYPE STRICT / MODERATE
-If a game or service is saying NAT TYPE STRICT / MODERATE please consult the following wiki entry: https://www.reddit.com/r/24hoursupport/wiki/internetissues#wiki_game_is_saying_nat_type_strict_.2F_moderate

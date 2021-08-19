@@ -1,0 +1,7 @@
+description: Link to wiki/thingstoconsiderlaptop
+has_inline: true
+message:
+ - "Before buying a laptop, please consult "
+ - text: this Wiki entry 
+   link: https://old.reddit.com/r/24hoursupport/wiki/thingstoconsiderlaptop
+ - for things to consider and alternatives

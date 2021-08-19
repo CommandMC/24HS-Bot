@@ -1,0 +1,6 @@
+description: Link to wiki/migratingwindows
+has_inline: true
+message:
+ - "While it is recommended to do a clean install, if you wish to migrate Windows to another drive please consult "
+ - text: this Wiki entry
+   link: https://old.reddit.com/r/24hoursupport/wiki/migratingwindows

@@ -1,0 +1,6 @@
+description: Link to wiki/hirenguide
+has_inline: true
+message:
+ - "If you wish to use Hiren's to do any number of things such as scanning for malware, checking the health of your drives, recovering / resetting your Windows install password, or recovering your Windows license please consult "
+ - text: this Wiki entry
+   link: https://old.reddit.com/r/24hoursupport/wiki/hirenguide

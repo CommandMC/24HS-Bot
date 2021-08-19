@@ -1,0 +1,33 @@
+description: Diagram showing where RAM should be placed
+raw_message: |-
+    Consult your manual to see where the RAM goes, also look into the UEFI and verify the RAM is running at the advertised clock, which often requires you to turn on XMP.
+    
+    Most common ram configuration is: 
+    ```
+    ┌─────────────┐
+    │             │
+    │     AMD     │
+    │     CPU     │
+    │     FAN     │
+    │             │
+    └─────────────┘
+    ╔╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╗
+    ╠╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╣ A1
+    ╚╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╝
+    ╔╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╗
+    ╠╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╣ A2   <──
+    ╚╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╝
+    ╔╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╗
+    ╠╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╣ B1
+    ╚╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╝
+    ╔╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╤╗
+    ╠╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╪╣ B2   <──
+    ╚╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╧╝
+    ```
+    https://cdn.discordapp.com/attachments/780461816563105812/796605675479629855/4kHKkPoye09VZ07AmtuXzDuqM2gXyW2ZoPcLxvYFcLU.png
+    
+    A1 is the DIMM slot that is the closest to the CPU, followed by A2, then B1 then B2 being the furthest away from the CPU.
+    
+    If you have two sticks, they go in A2 and B2.
+    
+    If you have one stick, it goes in A2.

@@ -1,0 +1,7 @@
+description: Instructions for SFC/DISM scans with chkdsk
+has_inline: true
+message:
+ - "Download the 24HS-Automator from "
+ - text: here
+   link: https://github.com/CommandMC/24HS-Automator/releases/latest
+ - " and run it. Select the first option (`Check system files`) by pressing 1 on your keyboard. Follow the instructions on screen and press Y when asked if you also want to run chkdsk."

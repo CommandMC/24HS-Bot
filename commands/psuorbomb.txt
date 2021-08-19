@@ -1,8 +1,0 @@
-Explains why to not cheap out on a PSU + link to tierlist
-A PSU is one of the few components you absolutely SHOULD NOT cheap out on. A bad PSU can easily kill your entire system and be a potential fire hazard.
-
-When purchasing a PSU, consult this list:  https://linustechtips.com/main/topic/1116640-psucultists-psu-tier-list/
-
-Ideally get nothing lower than tier A and B. Anything lower than tier C is a fire hazard.
-
-Photo of what happens with a bad PSU: https://cdn.discordapp.com/attachments/486190714863222784/748285874914983944/IMG_2131.png

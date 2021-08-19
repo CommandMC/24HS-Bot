@@ -1,0 +1,6 @@
+description: Link to wiki/internetissues -> "Certain websites or services are not accessible"
+has_inline: true
+message:
+ - "If certain websites or services are not accessible, please consult "
+ - text: this Wiki entry
+   link: https://old.reddit.com/r/24hoursupport/wiki/internetissues#wiki_certain_websites_or_services_are_not_accessible

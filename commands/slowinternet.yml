@@ -1,0 +1,6 @@
+description: Link to wiki/internetissues -> "My internet speed is not what I am paying for"
+has_inline: true
+message:
+ - "If you are not getting the internet speed you are paying for, please consult "
+ - text: this Wiki entry
+   link: https://old.reddit.com/r/24hoursupport/wiki/internetissues#wiki_my_internet_speed_is_not_what_i_am_paying_for

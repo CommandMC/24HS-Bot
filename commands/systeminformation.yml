@@ -1,0 +1,12 @@
+description: Link to wiki/systeminfo with some notes
+has_inline: true
+message:
+ - "To be of more help, we need more information about your system! Please follow "
+ - text: this wiki
+   link: https://old.reddit.com/r/24hoursupport/wiki/systeminformation
+ - |-
+    
+    
+    Please read wiki before asking "what is this?" or "is this safe?"
+    
+    **NOTE**: There are questions to be answered IN ADDITION to providing the file. **I WANT THE ANSWERS TO THE QUESTIONS.**

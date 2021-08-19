@@ -1,4 +1,0 @@
-Link to wiki/hirenguide
-If you wish to use Hiren's to do any number of things such as scanning for malware, checking the health of your drives, recovering / resetting your Windows install password, or recovering your Windows license please consult the following wiki entry: https://www.reddit.com/r/24hoursupport/wiki/hirenguide
-
-https://cdn.discordapp.com/attachments/514431063221731338/788535370064724018/4qi9a0.png

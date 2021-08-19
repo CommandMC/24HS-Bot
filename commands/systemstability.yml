@@ -1,0 +1,6 @@
+description: Link to wiki/systemstability
+has_inline: true
+message:
+ - "If you are having system stability issues, please consult "
+ - text: this Wiki entry
+   link: https://old.reddit.com/r/24hoursupport/wiki/systemstability

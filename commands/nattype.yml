@@ -1,0 +1,6 @@
+description: Link to wiki/internetissues -> NAT TYPE STRICT / MODERATE
+has_inline: true
+message:
+ - "If a game or service is saying NAT TYPE STRICT / MODERATE please consult "
+ - text: this Wiki entry
+   link: https://old.reddit.com/r/24hoursupport/wiki/internetissues#wiki_game_is_saying_nat_type_strict_.2F_moderate

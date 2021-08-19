@@ -1,1 +1,0 @@
-/home/commandmc/24HS-Bot/commands/ublock.txt

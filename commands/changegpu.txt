@@ -1,4 +1,0 @@
-Link to wiki/changinggpu
-When changing graphics cards, not clean uninstalling your previous graphic card's driver can cause issues when installing the new one, best to to use DDU (Display Driver Uninstaller) to get rid of them: https://old.reddit.com/r/24hoursupport/wiki/changinggpu
-
-https://cdn.discordapp.com/attachments/780461816563105812/794364030767988746/2Q.png

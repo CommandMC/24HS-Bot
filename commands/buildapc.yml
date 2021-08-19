@@ -1,0 +1,6 @@
+description: Link to beginners guide of r/buildapc. Weebery is strong with this one
+has_inline: true
+message:
+ - "For resources such as videos, wikis and photo guides on building a PC, please consult "
+ - text: this Wiki entry
+   link: https://www.reddit.com/r/buildapc/wiki/beginnersguide

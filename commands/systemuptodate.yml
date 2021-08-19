@@ -1,0 +1,6 @@
+description: Link to wiki/systemuptodate
+has_inline: true
+message:
+ - "To make sure your system is up to date (PLEASE do not just assume it is, read this top to bottom) consult "
+ - text: this Wiki entry
+   link: https://old.reddit.com/r/24hoursupport/wiki/systemuptodate

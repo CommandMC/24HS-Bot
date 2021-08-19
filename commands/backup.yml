@@ -1,0 +1,6 @@
+description: Info on Backups, link to DataHoarder wiki
+has_inline: true
+message:
+ - "For what makes a good backup and how to start, see "
+ - text: the /r/DataHoarder wiki on backups
+   link: https://old.reddit.com/r/DataHoarder/wiki/backups

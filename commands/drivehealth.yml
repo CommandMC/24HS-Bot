@@ -1,0 +1,6 @@
+description: Link to wiki/drivehealth
+has_inline: true
+message:
+ - "If you want to check the health status of your drive, follow "
+ - text: this Wiki entry
+   link: https://old.reddit.com/r/24hoursupport/wiki/drivehealth
