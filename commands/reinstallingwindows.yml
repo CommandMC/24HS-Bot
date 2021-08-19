@@ -4,3 +4,5 @@ message:
  - "For information on how to install/reinstall Windows 10, keep your Windows license, making the USB bootable (from Windows, Linux, ChromeOS, Android and MacOS), and how to deal with partition errors while installing (such as GPT or EFI errors) please consult "
  - text: this Wiki entry
    link: https://old.reddit.com/r/24hoursupport/wiki/installingwindows
+noinline_add: |-
+    https://cdn.discordapp.com/attachments/514431063221731338/788539775262916618/4qibrc.png

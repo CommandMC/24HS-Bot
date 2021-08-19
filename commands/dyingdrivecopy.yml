@@ -26,3 +26,5 @@ message:
     Instructions on how ddrescue works are 
  - text: here
    link: https://wiki.archlinux.org/index.php/Disk_cloning#Using_ddrescue
+noinline_add: |-
+    https://cdn.discordapp.com/attachments/572196581928075265/828878027655217162/unknown.png
