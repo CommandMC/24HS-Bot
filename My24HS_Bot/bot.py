@@ -142,7 +142,7 @@ class My24HSbot(Bot):
                         option_type=5,
                         required=False
                     )
-                ] if command_info.get('has_inline', False) else None
+                ]
             )
         # Once all commands are added, push them to Discord
         # This might not be necessary anymore, but I've found that without it some commands don't update immediately
@@ -195,8 +195,8 @@ class My24HSbot(Bot):
                 else:
                     embed_description = '[{}]({})'
                 embed_description = embed_description.format(
-                        command_info.get('message').get('text'), command_info.get('message').get('link')
-                    )
+                    command_info.get('message').get('text'), command_info.get('message').get('link')
+                )
             else:
                 embed_description = ''
                 for message_part in command_info.get('message'):
