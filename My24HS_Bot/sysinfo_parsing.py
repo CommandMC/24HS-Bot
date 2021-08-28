@@ -2,7 +2,8 @@ import logging
 
 from discord import Embed
 
-from My24HS_Bot.const import w10_build_to_version, w11_build_to_version, latest_nvidia_version, embed_color
+from My24HS_Bot.const import w10_build_to_version, w11_build_to_version, latest_nvidia_version, embed_color, \
+    latest_amd_version
 
 
 class SysinfoParser:
@@ -60,6 +61,12 @@ class SysinfoParser:
             # GPU driver update checking is currently only possible on NVIDIA GPUs
             if gpuname.startswith('NVIDIA'):
                 if gpuversions[i] == latest_nvidia_version:
+                    gpu_ver_string = ':white_check_mark: Up to date ({})'.format(gpuversions[i])
+                else:
+                    gpu_ver_string = ':x: Not up to date ({})'.format(gpuversions[i])
+                    gpu_outdated = True
+            elif gpuname.startswith('AMD'):
+                if gpuversions[i] == latest_amd_version:
                     gpu_ver_string = ':white_check_mark: Up to date ({})'.format(gpuversions[i])
                 else:
                     gpu_ver_string = ':x: Not up to date ({})'.format(gpuversions[i])
