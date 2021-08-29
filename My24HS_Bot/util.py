@@ -126,6 +126,10 @@ def handle_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
             try:
                 device = line.split('\t')[1]
             except IndexError:
+                # If we haven't found the TPM version info in there, it isn't loaded and thus not available
+                # This usually indicates some other problem earlier on (maybe some lines are missing in the system
+                # summary section), but once we 'go_to_section' we should be able to ignore them
+                tpm_available = False
                 break
             if device.startswith('Trusted Platform Module'):
                 tpm_version = device.split(' ')[-1]
