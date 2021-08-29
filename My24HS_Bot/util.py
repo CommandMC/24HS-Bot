@@ -125,7 +125,10 @@ def handle_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
         for line in fd:
             if line.startswith('['):
                 break
-            device = line.split('\t')[1]
+            try:
+                device = line.split('\t')[1]
+            except IndexError:
+                break
             if device.startswith('Trusted Platform Module'):
                 tpm_version = device.split(' ')[-1]
                 break
