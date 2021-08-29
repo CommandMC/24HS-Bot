@@ -123,8 +123,6 @@ def handle_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
         # Go to [Memory]
         go_to_section(fd, 8)
         for line in fd:
-            if line.startswith('['):
-                break
             try:
                 device = line.split('\t')[1]
             except IndexError:
