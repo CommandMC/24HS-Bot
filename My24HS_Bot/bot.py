@@ -134,7 +134,6 @@ class My24HSbot(Bot):
                 name=command_name,
                 description=command_info.get('description'),
                 guild_ids=list(guild.id for guild in self.guilds),
-                # FIXME: Even if commands don't have inline links, the option still gets added. No idea why
                 options=[
                     create_option(
                         name='noinline',
