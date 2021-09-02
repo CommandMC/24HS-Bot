@@ -3,6 +3,7 @@ import discord
 import discord_slash
 import logging
 import os
+import traceback
 import yaml
 from discord import File, Message, Member, Guild, Embed
 from discord.ext.commands import Bot, Context
@@ -87,7 +88,20 @@ class My24HSbot(Bot):
         await interaction.respond(
             type=InteractionType.DeferredUpdateMessage
         )
-        info, quickdiagnosis = handle_sysinfo(utf8_sysinfo)
+        try:
+            info, quickdiagnosis = handle_sysinfo(utf8_sysinfo)
+        except Exception as e:
+            await message.channel.send(
+                content='There was an issue parsing this sysinfo file \\:( \n```\n' +
+                        ''.join(traceback.format_exception(type(e), e, e.__traceback__)) + '```',
+                delete_after=30.0
+            )
+            await msg.delete()
+            self.logger.info(
+                'Failed to parse sysinfo file: \n' +
+                ''.join(traceback.format_exception(type(e), e, e.__traceback__))
+            )
+            return
         file_to_attach = File(
             fp=utf8_sysinfo,
             filename='.'.join(attachment.filename.split('.')[:-1]) + '_utf8.txt'
