@@ -223,10 +223,10 @@ class My24HSbot(Bot):
                         embed_description += part_to_add.format(
                             message_part.get('text'), message_part.get('link')
                         )
-            # If we have extra description for when inline links are disabled, add that to the description
-            if noinline and command_info.get('noinline_add'):
-                embed_description += '\n\n'
-                embed_description += command_info.get('noinline_add')
+        # If we have extra description for when inline links are disabled, add that to the description
+        if noinline and command_info.get('noinline_add'):
+            embed_description += '\n\n'
+            embed_description += command_info.get('noinline_add')
         embed.description = embed_description
         return command_info.get('raw_message'), embed, files_to_attach
 
