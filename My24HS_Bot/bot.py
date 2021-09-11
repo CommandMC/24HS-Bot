@@ -5,7 +5,7 @@ import logging
 import os
 import traceback
 import yaml
-from discord import File, Message, Member, Guild, Embed
+from discord import File, Message, Member, Guild, Embed, Activity, ActivityType
 from discord.ext.commands import Bot, Context
 from discord_components import DiscordComponents, Button, ButtonStyle, InteractionType
 from discord_slash.utils.manage_commands import create_option
@@ -28,6 +28,7 @@ class My24HSbot(Bot):
         await self.sync_commands()
         # Add discord_components to the bot (to be able to use Buttons)
         DiscordComponents(self)
+        await self.change_presence(activity=Activity(name='DanielIsCool.txt', type=ActivityType.watching))
         self.logger.info('on_ready finished, logged in as {}'.format(self.user))
 
     async def on_guild_join(self, guild: Guild):
