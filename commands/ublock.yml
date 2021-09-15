@@ -5,6 +5,8 @@ message:
  - text: uBlock Origin
    link: https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/
  - |-
+    .
+
     Click on the extension icon and open the dashboard/settings. Go to Filter lists, expand all the lists and enable ALL OF THEM but experimental and languages (unless you are in a country that speaks another language besides english) and once you expanded and selected all the filter lists, go to the top and click Purge all Caches, and then Update now. Let it update for a few minutes, once it's done you are all good. If you ever get ads again simply go to the dashboard again, and click Purge all caches and Update now.
     
     To also get rid of sponsorships (and other unwanted content) inside Youtube videos, install 
