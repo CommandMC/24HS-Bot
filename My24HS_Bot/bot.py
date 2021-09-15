@@ -213,12 +213,21 @@ class My24HSbot(Bot):
                 )
             else:
                 embed_description = ''
-                for message_part in command_info.get('message'):
+                message: list[(dict, str)] = command_info.get('message')
+                for message_part in message:
                     if type(message_part) is str:
                         embed_description += message_part
                     else:
                         if noinline:
                             part_to_add = '{}: {}'
+                            # If we have a word right after the link, add a space before it
+                            try:
+                                next_message_part: str = message[message.index(message_part) + 1]
+                            except IndexError:
+                                pass
+                            else:
+                                if type(next_message_part) is str and next_message_part[0] not in (' ', '.', ','):
+                                    part_to_add += ' '
                         else:
                             part_to_add = '[{}]({})'
                         embed_description += part_to_add.format(
