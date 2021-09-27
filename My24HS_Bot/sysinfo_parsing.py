@@ -37,14 +37,15 @@ class SysinfoParser:
         self.add_info('Windows version', ':white_check_mark: Up to date ({})'.format(current_version))
         self.logger.info('Windows version {}, up to date'.format(current_version))
 
-    def ram_capacity(self, ram_capacity: str):
+    def ram_capacity(self, ram_capacity: str) -> int:
         ram_capacity = ram_capacity.replace(',', '.')
         ram_capacity_gb = int(ram_capacity.split('.')[0])
         self.logger.info('RAM Capacity: {} GB'.format(ram_capacity_gb))
         if ram_capacity_gb < 8:
             self.add_info('RAM Capacity', ':warning: {} GB'.format(ram_capacity_gb))
-            return
-        self.add_info('RAM Capacity', ':white_check_mark: {} GB'.format(ram_capacity_gb))
+        else:
+            self.add_info('RAM Capacity', ':white_check_mark: {} GB'.format(ram_capacity_gb))
+        return ram_capacity_gb
 
     def add_gpus(self, gpunames, gpuversions):
         # This determines where and when we have to insert blank fields
