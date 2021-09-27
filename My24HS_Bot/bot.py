@@ -262,7 +262,7 @@ class My24HSbot(Bot):
             content=message,
             embed=embed
         )
-        # Send the attachments as a seperate message, since otherwise they get displayed above the embed and that
+        # Send the attachments as a separate message, since otherwise they get displayed above the embed and that
         # looks weird
         if attachments:
             await ctx.channel.send(
@@ -272,7 +272,7 @@ class My24HSbot(Bot):
 
 def button_check(ctx, msg: Message) -> bool:
     # So, this gets ran whenever any button gets pressed. This creates an issue when two functions are waiting for a
-    # button press at the same time, since both recieve the same event, but only one should of course be triggered.
+    # button press at the same time, since both receive the same event, but only one should of course be triggered.
     # Because of that, we have to also check if the message ID of the message we initially sent out (the one which has
     # the buttons on it) and the message ID of the message where a button was being pressed are the same
     # I hope this made sense
