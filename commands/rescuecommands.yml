@@ -1,7 +1,6 @@
-description: Instructions for SFC/DISM scans
+description: Instructions for SFC/DISM and CHKDSK scans
 has_inline: true
 message:
- - "Download the 24HS-Automator from "
- - text: here
-   link: https://github.com/CommandMC/24HS-Automator/releases/latest
- - " and run it. Select the first option (`Check system files`) by pressing 1 on your keyboard. Follow the instructions on screen and press N when asked if you also want to run chkdsk."
+ - "If you want to verify your system files, please consult "
+ - text: this Wiki entry
+   link: https://github.com/CommandMC/24HS-Wiki/blob/main/rescuecommands.md
