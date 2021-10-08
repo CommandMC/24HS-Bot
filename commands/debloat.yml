@@ -1,0 +1,6 @@
+description: Link to Debloat Doc
+has_inline: true
+message:
+ - "For an explanation on why you should never debloat Windows, please read "
+ - text: this Wiki entry
+   link: https://docs.google.com/document/d/1Jk21e1z4y4EfQPPu_2KwN6CRw4s7QJZ8aiHQbdz97Wo/edit
