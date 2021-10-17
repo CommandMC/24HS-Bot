@@ -12,7 +12,7 @@ sysinfo_allowed_roles = [
     # Members in Nvidia
     185774676969127936,
     # Mods in 24HS
-    370559677949280257, 
+    370559677949280257,
     # Feel Free to Ping in 24HS
     421504795988197377,
     # Helpdesk in Nvidia
@@ -30,6 +30,7 @@ def download_latest_nvidia_version() -> str:
         return req.text.splitlines()[0]
     else:
         raise ConnectionError
+
 
 def download_latest_amd_version() -> str:
     req = requests.get('https://raw.githubusercontent.com/CommandMC/24HS-Automator/main/versions/amdGPU.txt')
