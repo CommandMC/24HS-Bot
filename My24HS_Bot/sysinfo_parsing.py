@@ -19,15 +19,17 @@ class SysinfoParser:
         )
         self.logger = logging.getLogger('SysinfoParser')
 
+    # noinspection PyUnboundLocalVariable
     def windows_version(self, os_name: str, windows_build: str):
-        if os_name.startswith('Microsoft Windows 10'):
-            is_up_to_date, current_version, latest_version = build_version_check(windows_build, w10_build_to_version)
-        elif os_name.startswith('Microsoft Windows 11'):
-            is_up_to_date, current_version, latest_version = build_version_check(windows_build, w11_build_to_version)
-            current_version = '**W11**-' + current_version
-        else:
-            is_up_to_date = False
-            current_version = 'Unsupported, W7?'
+        try:
+            if os_name.startswith('Microsoft Windows 10'):
+                is_up_to_date, current_version, latest_version = build_version_check(windows_build, w10_build_to_version)
+            elif os_name.startswith('Microsoft Windows 11'):
+                is_up_to_date, current_version, latest_version = build_version_check(windows_build, w11_build_to_version)
+                current_version = '**W11**-' + current_version
+        except ValueError:
+            self.add_info('Windows version', ':question: Unsure (Build {})'.format(windows_build))
+            return
 
         if not is_up_to_date:
             self.add_info('Windows version', ':x: Not up to date ({})'.format(current_version))
