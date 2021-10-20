@@ -25,19 +25,11 @@ embed_color = Color.dark_red()
 
 
 def download_latest_nvidia_version() -> str:
-    req = requests.get('https://raw.githubusercontent.com/CommandMC/24HS-Automator/main/versions/nvidiaGPU.txt')
-    if req.status_code == 200:
-        return req.text.splitlines()[0]
-    else:
-        raise ConnectionError
+    return '496.13'
 
 
 def download_latest_amd_version() -> str:
-    req = requests.get('https://raw.githubusercontent.com/CommandMC/24HS-Automator/main/versions/amdGPU.txt')
-    if req.status_code == 200:
-        return req.text.splitlines()[2]
-    else:
-        raise ConnectionError
+    return '30.0.13025.5005'
 
 
 system_manufacturer_unknown_values = [
