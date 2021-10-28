@@ -25,11 +25,11 @@ embed_color = Color.dark_red()
 
 
 def download_latest_nvidia_version() -> str:
-    return '496.13'
+    return '496.49'
 
 
 def download_latest_amd_version() -> str:
-    return '30.0.13025.5005'
+    return '30.0.13031.1001'
 
 
 system_manufacturer_unknown_values = [
