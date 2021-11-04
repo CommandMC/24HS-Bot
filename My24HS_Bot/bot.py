@@ -177,7 +177,7 @@ class My24HSbot(Bot):
 
         # If the command is a copy of another command, run this function with the actual command
         if command_info.get('copy_of'):
-            self.logger.info('Command /{} is a copy of /{}, re-running function with that command'.format(
+            self.logger.debug('Command /{} is a copy of /{}, re-running function with that command'.format(
                 command, command_info.get('copy_of')
             ))
             return self.get_command_resp(command_info.get('copy_of'), noinline)
