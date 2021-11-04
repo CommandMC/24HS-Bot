@@ -22,14 +22,20 @@ class My24HSbot(Bot):
         self.shash_handler = discord_slash.SlashCommand(self)
         self.logger = logging.getLogger('24HS-Bot')
         self.commands_list: dict = {}
+        self.is_started = False
 
     async def on_ready(self):
+        # on_ready is called when the bot starts and when it reconnects. Thus, we can't just add the commands
+        # every time we're in here, since that will error out with duplicate command warnings
+        if self.is_started:
+            return
         # Add and sync slash commands
         await self.sync_commands()
         # Add discord_components to the bot (to be able to use Buttons)
         DiscordComponents(self)
         await self.change_presence(activity=Activity(name='DanielIsCool.txt', type=ActivityType.watching))
         self.logger.info('on_ready finished, logged in as {}'.format(self.user))
+        self.is_started = True
 
     async def on_guild_join(self, guild: Guild):
         self.logger.info('Joined a guild! {}'.format(guild.name))
