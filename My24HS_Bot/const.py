@@ -25,7 +25,7 @@ embed_color = Color.dark_red()
 
 
 def download_latest_nvidia_version() -> str:
-    return '496.49'
+    return '496.61'
 
 
 def download_latest_amd_version() -> str:
