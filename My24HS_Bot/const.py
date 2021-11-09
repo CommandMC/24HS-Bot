@@ -29,7 +29,7 @@ def download_latest_nvidia_version() -> str:
 
 
 def download_latest_amd_version() -> str:
-    return '30.0.13031.1001'
+    return '30.0.13033.1000'
 
 
 system_manufacturer_unknown_values = [
