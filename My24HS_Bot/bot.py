@@ -7,12 +7,14 @@ import traceback
 import yaml
 from discord import File, Message, Member, Guild, Embed, Activity, ActivityType
 from discord.ext.commands import Bot, Context
-from discord_components import DiscordComponents, Button, ButtonStyle, InteractionType
+from discord_slash import ButtonStyle, ComponentContext
 from discord_slash.utils.manage_commands import create_option
-from io import BytesIO, StringIO
+from discord_slash.utils.manage_components import create_button, create_actionrow, wait_for_component
+from io import StringIO
+from typing import Union
 
 from My24HS_Bot.const import commands_dir, sysinfo_allowed_roles, embed_color, attachments_dir
-from My24HS_Bot.util import handle_sysinfo, is_sysinfo, convert_utf16_utf8
+from My24HS_Bot.util import handle_sysinfo, download_sysinfo
 
 
 # Python doesn't allow classes to start with a number, so we have to add a "My" to the start of this
@@ -22,113 +24,113 @@ class My24HSbot(Bot):
         self.shash_handler = discord_slash.SlashCommand(self)
         self.logger = logging.getLogger('24HS-Bot')
         self.commands_list: dict = {}
-        self.is_started = False
+        self.has_added_commands = False
 
     async def on_ready(self):
+        await self.change_presence(activity=Activity(name='DanielIsCool.txt', type=ActivityType.watching))
         # on_ready is called when the bot starts and when it reconnects. Thus, we can't just add the commands
         # every time we're in here, since that will error out with duplicate command warnings
-        if self.is_started:
+        if self.has_added_commands:
             return
         # Add and sync slash commands
-        await self.sync_commands()
-        # Add discord_components to the bot (to be able to use Buttons)
-        DiscordComponents(self)
-        await self.change_presence(activity=Activity(name='DanielIsCool.txt', type=ActivityType.watching))
+        await self.add_commands()
         self.logger.info('on_ready finished, logged in as {}'.format(self.user))
-        self.is_started = True
+        self.has_added_commands = True
 
     async def on_guild_join(self, guild: Guild):
         self.logger.info('Joined a guild! {}'.format(guild.name))
-        await self.sync_commands()
+        await self.add_commands([guild.id])
 
     async def on_guild_remove(self, guild: Guild):
         self.logger.info('Left a guild! {}'.format(guild.name))
-        await self.sync_commands()
+        await self.add_commands([guild.id])
 
     async def on_message(self, message: discord.Message):
-        # Ignore special messages (like member joins or nitro boosts)
-        if message.type is not discord.MessageType.default:
+        if not self.is_interesting_message(message):
             return
-        # Ignore messages we send ourselves
-        if message.author == self.user:
-            return
-        # Ignore messages without any attachments
-        if not message.attachments:
-            return
-        for attachment in message.attachments:
-            if not attachment.filename.endswith('.txt'):
-                self.logger.debug('Got an attachment, but it\'s not a text file')
-                continue
-            if not attachment.content_type.endswith('UTF-16'):
-                self.logger.debug('Got an attachment that is a text file, but it\'s not UTF-16-encoded')
-                continue
 
-            self.logger.debug('Got a UTF-16 encoded text file. This might be a sysinfo!')
-            # Save the file into memory
-            temp_storage = BytesIO()
-            await attachment.save(temp_storage)
-            utf8_sysinfo = convert_utf16_utf8(temp_storage)
-            if not is_sysinfo(utf8_sysinfo):
-                self.logger.debug('Text file turned out to not be a sysinfo file.')
-                continue
-            await self.handle_sysinfo(utf8_sysinfo, message, attachment)
+        # I don't think it's possible for regular users to attach more than one text file to a message, so doing [0]
+        # here should be fine
+        sysinfo_attachment = message.attachments[0]
 
-    async def handle_sysinfo(self, utf8_sysinfo: StringIO, message, attachment):
+        # Ignore non-text attachments and text attachments that aren't UTF-16
+        if not sysinfo_attachment.filename.endswith('.txt') and not sysinfo_attachment.content_type.endswith('UTF-16'):
+            return
+
+        self.logger.debug('Got a UTF-16 encoded text file. This might be a sysinfo!')
+        utf8_sysinfo_or_false = await download_sysinfo(sysinfo_attachment)
+        if not utf8_sysinfo_or_false:
+            self.logger.debug('Text file turned out to not be a sysinfo file.')
+            return
+
+        filename_without_extension = '.'.join(sysinfo_attachment.filename.split('.')[:-1])
+        new_filename = filename_without_extension + '_utf8.txt'
+        await self.handle_sysinfo(utf8_sysinfo_or_false, message, new_filename)
+
+    async def handle_sysinfo(self, utf8_sysinfo: StringIO, message, filename: str):
         self.logger.info(
             'Asking if sysinfo file in #{} (sent by {}) should be parsed'.format(message.channel, message.author)
         )
-        yes_button = Button(label='Yes', style=ButtonStyle.green)
-        no_button = Button(label='No', style=ButtonStyle.red)
+        action_row = create_actionrow(
+            create_button(label='Yes', style=ButtonStyle.green),
+            create_button(label='No', style=ButtonStyle.red)
+        )
         msg: Message
         msg = await message.channel.send(
-            content='A sysinfo file was detected! Do you want to run QuickDiagnose?',
-            components=[yes_button, no_button]
+            content='A sysinfo file was detected! Do you want to run QuickDiagnose?\n\n'
+                    'Note: Only tech support can press the buttons',
+            components=[action_row]
         )
         try:
-            interaction = await self.wait_for('button_click', check=lambda x: button_check(x, msg), timeout=600)
+            interaction: ComponentContext = await wait_for_component(
+                self,
+                components=action_row,
+                timeout=600,
+                check=button_check
+            )
         except asyncio.TimeoutError:
             await msg.delete()
             return
-        if interaction.component.label == 'No':
+
+        if interaction.component['label'] == 'No':
             await msg.delete()
             return
-        await interaction.respond(
-            type=InteractionType.DeferredUpdateMessage
+
+        await interaction.edit_origin(
+            content='Parsing Sysinfo...',
+            components=None
         )
-        try:
-            info, quickdiagnosis = handle_sysinfo(utf8_sysinfo)
-        except Exception as e:
+
+        async with interaction.channel.typing():
+            try:
+                info, quickdiagnosis = handle_sysinfo(utf8_sysinfo)
+            except Exception as e:
+                await message.channel.send(
+                    content='There was an issue parsing this sysinfo file \\:( \n```\n' +
+                            ''.join(traceback.format_exception(type(e), e, e.__traceback__)) + '```',
+                    delete_after=30.0
+                )
+                await msg.delete()
+                self.logger.info(
+                    'Failed to parse sysinfo file: \n' +
+                    ''.join(traceback.format_exception(type(e), e, e.__traceback__))
+                )
+                return
             await message.channel.send(
-                content='There was an issue parsing this sysinfo file \\:( \n```\n' +
-                        ''.join(traceback.format_exception(type(e), e, e.__traceback__)) + '```',
-                delete_after=30.0
+                embed=info
             )
-            await msg.delete()
-            self.logger.info(
-                'Failed to parse sysinfo file: \n' +
-                ''.join(traceback.format_exception(type(e), e, e.__traceback__))
-            )
-            return
-        file_to_attach = File(
-            fp=utf8_sysinfo,
-            filename='.'.join(attachment.filename.split('.')[:-1]) + '_utf8.txt'
-        )
-        await message.channel.send(
-            embed=info
-        )
-        if quickdiagnosis.description != '':
+            if quickdiagnosis.description != '':
+                await message.channel.send(
+                    embed=quickdiagnosis
+                )
             await message.channel.send(
-                embed=quickdiagnosis
+                content='Sysinfo file in UTF-8 encoding:',
+                file=File(fp=utf8_sysinfo, filename=filename)
             )
-        await message.channel.send(
-            content='Sysinfo file in UTF-8 encoding:',
-            file=file_to_attach
-        )
         self.logger.info('Parsed sysinfo file in #{} (sent by {})'.format(message.channel, message.author))
         await msg.delete()
 
-    async def sync_commands(self):
-        # Go through the commands
+    def read_commands(self):
         for file_or_folder in os.listdir(commands_dir):
             if not os.path.isfile(os.path.join(commands_dir, file_or_folder)):
                 continue
@@ -140,21 +142,27 @@ class My24HSbot(Bot):
             with open(os.path.join(commands_dir, file_or_folder)) as f:
                 self.commands_list[filename] = yaml.safe_load(f)
 
+    async def add_commands(self, guilds: list[Guild] = None):
+        # If specific guilds aren't specified, use all guilds
+        if guilds is None:
+            guilds = self.guilds
+
+        guild_ids = list(guild.id for guild in guilds)
+        # If we don't have commands stored yet, read them in
+        if not self.commands_list:
+            self.read_commands()
+
         for command_name, command_info in self.commands_list.items():
+            # If the command is a copy, replace all the info (description etc.) with the original one's
             if command_info.get('copy_of'):
                 self.logger.debug('Command {} is a copy of {}'.format(command_name, command_info.get('copy_of')))
                 command_info = self.commands_list[command_info.get('copy_of')]
-
-            # If the description is empty or not a string, we can't add the command
-            if not command_info.get('description') or type(command_info.get('description')) is not str:
-                self.logger.error('Cannot add command /{}, no description'.format(command_name))
-                continue
 
             self.shash_handler.add_slash_command(
                 cmd=self.handle_command,
                 name=command_name,
                 description=command_info.get('description'),
-                guild_ids=list(guild.id for guild in self.guilds),
+                guild_ids=guild_ids,
                 options=[
                     create_option(
                         name='noinline',
@@ -168,11 +176,7 @@ class My24HSbot(Bot):
         # This might not be necessary anymore, but I've found that without it some commands don't update immediately
         await self.shash_handler.sync_all_commands()
 
-    def get_command_resp(self, command: str, noinline: bool) -> tuple[(str, None), (Embed, None), list[File]]:
-        if command not in self.commands_list:
-            self.logger.error('Command /{} does not exist. This should be impossible!'.format(command))
-            return None, Embed(), []
-
+    def get_command_resp(self, command: str, noinline: bool) -> tuple[Union[str, None], Union[Embed, None], list[File]]:
         command_info: dict = self.commands_list[command]
 
         # If the command is a copy of another command, run this function with the actual command
@@ -203,13 +207,9 @@ class My24HSbot(Bot):
                 embed_description = command_info.get('message')
             else:
                 embed_description = ''.join(command_info.get('message'))
+        # We have inline links
         else:
-            # This shouldn't happen (since if we only have a string, the command can't have inline links since those
-            # are dicts), but we'll handle it anyways
-            if type(command_info.get('message')) is str:
-                embed_description = command_info.get('message')
-            # If we only have one embed link as the message, set that
-            elif type(command_info.get('message')) is dict:
+            if type(command_info.get('message')) is dict:
                 if noinline:
                     embed_description = '{}: {}'
                 else:
@@ -217,12 +217,14 @@ class My24HSbot(Bot):
                 embed_description = embed_description.format(
                     command_info.get('message').get('text'), command_info.get('message').get('link')
                 )
+            # We have a list of either text or links
             else:
                 embed_description = ''
-                message: list[(dict, str)] = command_info.get('message')
+                message: list[Union[dict, str]] = command_info.get('message')
                 for message_part in message:
                     if type(message_part) is str:
                         embed_description += message_part
+                    # We have a link (dict) now
                     else:
                         if noinline:
                             part_to_add = '{}: {}'
@@ -239,6 +241,7 @@ class My24HSbot(Bot):
                         embed_description += part_to_add.format(
                             message_part.get('text'), message_part.get('link')
                         )
+
         # If we have extra description for when inline links are disabled, add that to the description
         if noinline and command_info.get('noinline_add'):
             embed_description += '\n\n'
@@ -248,49 +251,39 @@ class My24HSbot(Bot):
 
     async def handle_command(self, ctx: Context, noinline: (bool, None) = None):
         self.logger.info('{} used /{} in #{}'.format(ctx.author, ctx.command, ctx.channel))
+
         # If the channel name the command was used in contains "commands" and the user hasn't specifically turned on
         # inline links, assume they want inline links turned off
         if noinline is None:
             noinline = 'commands' in ctx.channel.name
+
         message, embed, attachments = self.get_command_resp(ctx.command, noinline)
-        # If we have neither a message nor an embed, only send the attachments (if any)
-        if not message and not embed:
-            if attachments:
-                await ctx.send(
-                    files=attachments
-                )
-            else:
-                await ctx.send(
-                    content='There was an error processing this command.'
-                )
-            return
-        await ctx.send(
-            content=message,
-            embed=embed
-        )
-        # Send the attachments as a separate message, since otherwise they get displayed above the embed and that
-        # looks weird
-        if attachments:
-            await ctx.channel.send(
-                files=attachments
-            )
+
+        async with ctx.channel.typing():
+            if message or embed:
+                await ctx.send(content=message, embed=embed)
+            # If we don't want inline links, attachments are already added at the end of the original message
+            if attachments and not noinline:
+                # We can only send attachments if we either have access to the channel or we haven't replied to the
+                # command yet
+                can_send_attachments = ctx.channel or (not message and not embed)
+                if can_send_attachments:
+                    if not message and not embed:
+                        await ctx.send(files=attachments)
+                    else:
+                        await ctx.channel.send(files=attachments)
+
+    def is_interesting_message(self, msg: Message) -> bool:
+        return msg.attachments and msg.author != self.user
 
 
-def button_check(ctx, msg: Message) -> bool:
-    # So, this gets ran whenever any button gets pressed. This creates an issue when two functions are waiting for a
-    # button press at the same time, since both receive the same event, but only one should of course be triggered.
-    # Because of that, we have to also check if the message ID of the message we initially sent out (the one which has
-    # the buttons on it) and the message ID of the message where a button was being pressed are the same
-    # I hope this made sense
-    if msg.id != ctx.message.id:
-        return False
+def button_check(ctx: ComponentContext) -> bool:
     # Always allow button presses when in DMs/Groups
     if not ctx.guild:
         return True
-    member: Member = ctx.guild.get_member(ctx.user.id)
+
+    # If we are in a guild, check if the member is allowed to press the button
+    member: Member = ctx.guild.get_member(ctx.author.id)
     if not member:
         return False
-    for role in member.roles:
-        if role.id in sysinfo_allowed_roles:
-            return True
-    return False
+    return any(role.id in sysinfo_allowed_roles for role in member.roles)

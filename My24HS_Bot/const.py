@@ -24,12 +24,22 @@ sysinfo_allowed_roles = [
 embed_color = Color.dark_red()
 
 
-def download_latest_nvidia_version() -> str:
-    return '496.61'
+def download_latest_nvidia_version() -> dict:
+    data: dict = requests.get(
+        'https://raw.githubusercontent.com/24HourSupport/CommonSoftware/main/nvidia_gpu.json'
+    ).json()
+    name_and_version = {}
+    for branch_name, branch_data in data.items():
+        name_and_version[branch_name] = branch_data['version']
+    return name_and_version
 
 
-def download_latest_amd_version() -> str:
-    return '30.0.13033.5003'
+def download_latest_amd_version() -> dict:
+    data: dict = requests.get('https://raw.githubusercontent.com/24HourSupport/CommonSoftware/main/amd_gpu.json').json()
+    name_and_version = {}
+    for branch_name, branch_data in data.items():
+        name_and_version[branch_name] = branch_data['win_driver_version']
+    return name_and_version
 
 
 system_manufacturer_unknown_values = [
@@ -40,8 +50,8 @@ system_model_unknown_values = [
     'To Be Filled By O.E.M.',
     'System Product Name'
 ]
-latest_nvidia_version = download_latest_nvidia_version()
-latest_amd_version = download_latest_amd_version()
+nvidia_driver_versions = download_latest_nvidia_version()
+amd_driver_versions = download_latest_amd_version()
 w10_build_to_version = {
     '10240': '1507',
     '10586': '1511',

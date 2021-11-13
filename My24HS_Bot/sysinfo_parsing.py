@@ -2,8 +2,8 @@ import logging
 
 from discord import Embed
 
-from My24HS_Bot.const import w10_build_to_version, w11_build_to_version, latest_nvidia_version, embed_color, \
-    latest_amd_version
+from My24HS_Bot.const import w10_build_to_version, w11_build_to_version, embed_color, nvidia_driver_versions, \
+    amd_driver_versions
 
 
 class SysinfoParser:
@@ -49,33 +49,32 @@ class SysinfoParser:
             self.add_info('RAM Capacity', ':white_check_mark: {} GB'.format(ram_capacity_gb))
         return ram_capacity_gb
 
-    def add_gpus(self, gpunames, gpuversions):
+    def add_gpus(self, gpu_names, gpu_versions):
         # This determines where and when we have to insert blank fields
         magic_formatting_num = len(self.info.fields) % 3
-        for i in range(len(gpunames)):
+        for i in range(len(gpu_names)):
             # If we started with having one field until a new row, add an empty field now
             if magic_formatting_num == 2:
                 self.add_info('\u200b', '\u200b')
                 magic_formatting_num = 0
-            gpuname = gpunames[i]
-            self.add_info('GPU {}'.format(i + 1) if len(gpunames) != 1 else 'GPU', gpuname)
+            gpuname = gpu_names[i]
+            self.add_info('GPU {}'.format(i + 1) if len(gpu_names) != 1 else 'GPU', gpuname)
 
             gpu_outdated = False
-            # GPU driver update checking is currently only possible on NVIDIA GPUs
             if gpuname.startswith('NVIDIA'):
-                if gpuversions[i] == latest_nvidia_version:
-                    gpu_ver_string = ':white_check_mark: Up to date ({})'.format(gpuversions[i])
+                if is_up_to_date_nvidia(gpuname, gpu_versions[i]):
+                    gpu_ver_string = ':white_check_mark: Up to date ({})'.format(gpu_versions[i])
                 else:
-                    gpu_ver_string = ':x: Not up to date ({})'.format(gpuversions[i])
+                    gpu_ver_string = ':x: Not up to date ({})'.format(gpu_versions[i])
                     gpu_outdated = True
             elif gpuname.startswith('AMD'):
-                if gpuversions[i] == latest_amd_version:
-                    gpu_ver_string = ':white_check_mark: Up to date ({})'.format(gpuversions[i])
+                if is_up_to_date_amd(gpu_versions[i]):
+                    gpu_ver_string = ':white_check_mark: Up to date ({})'.format(gpu_versions[i])
                 else:
-                    gpu_ver_string = ':x: Not up to date ({})'.format(gpuversions[i])
+                    gpu_ver_string = ':x: Not up to date ({})'.format(gpu_versions[i])
                     gpu_outdated = True
             else:
-                gpu_ver_string = gpuversions[i]
+                gpu_ver_string = gpu_versions[i]
 
             self.add_info('Driver Version', gpu_ver_string)
 
@@ -83,7 +82,7 @@ class SysinfoParser:
             if magic_formatting_num == 1:
                 magic_formatting_num = 0
             # And finally, if we're on our last GPU, there's no need to add an empty field
-            elif i != len(gpunames) - 1:
+            elif i != len(gpu_names) - 1:
                 # Add an empty 3rd field, since otherwise the ordering would look weird with more than one GPU installed
                 self.add_info('\u200b', '\u200b')
 
@@ -112,3 +111,17 @@ def build_version_check(build_num: str, build_to_version: dict) -> tuple[bool, s
         # return the current version name as the most recent
         return True, version_name, version_name
     return False, version_name, list(build_to_version.values())[-1]
+
+
+def is_up_to_date_nvidia(gpu_name: str, driver_version: str) -> bool:
+    branches = nvidia_driver_versions.copy()
+
+    # The professional driver is only an option if you're using a professional GPU
+    if not any(name in gpu_name for name in ['Quadro', 'Tesla', 'Grid']):
+        branches.pop('professional')
+
+    return any(version == driver_version for version in branches.values())
+
+
+def is_up_to_date_amd(driver_version: str) -> bool:
+    return any(version == driver_version for version in amd_driver_versions.values())

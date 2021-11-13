@@ -1,8 +1,10 @@
 from io import StringIO, BytesIO
+from typing import Union
 
-from discord import Embed
+from discord import Embed, Attachment
 
-from My24HS_Bot.const import system_manufacturer_unknown_values, system_model_unknown_values
+from My24HS_Bot.const import system_manufacturer_unknown_values, system_model_unknown_values, nvidia_driver_versions, \
+    amd_driver_versions
 from My24HS_Bot.sysinfo_parsing import SysinfoParser
 
 
@@ -168,3 +170,12 @@ def handle_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
 
     fd.seek(0)
     return parser.info, parser.quickfixes
+
+
+async def download_sysinfo(attachment: Attachment) -> Union[StringIO, bool]:
+    storage = BytesIO()
+    await attachment.save(storage)
+    utf8_sysinfo = convert_utf16_utf8(storage)
+    if not is_sysinfo(utf8_sysinfo):
+        return False
+    return utf8_sysinfo
