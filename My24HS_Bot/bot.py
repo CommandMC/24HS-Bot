@@ -265,8 +265,11 @@ class My24HSbot(Bot):
         async with ctx.channel.typing():
             if message or embed:
                 await ctx.send(content=message, embed=embed)
-            # If we don't want inline links, attachments are already added at the end of the original message
-            if attachments and not noinline:
+
+            # If we don't have attachments, we of course can't send any
+            # If 'noinline' is set, the attachment links will already be in the original message
+            # *unless* we don't have an original message, in which case we'll always have to send them
+            if attachments and not (noinline and (message or embed)):
                 # We can only send attachments if we either have access to the channel or we haven't replied to the
                 # command yet
                 can_send_attachments = ctx.channel or (not message and not embed)
