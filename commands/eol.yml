@@ -1,0 +1,8 @@
+description: Link to end of life explanation
+has_inline: true
+message:
+ - "If you are being sent this, it means there is a possibility your hardware is end of life,  "
+ - text: if you do not know what this is or do not know if your hardware is end of life, please follow this wiki
+   link: https://docs.google.com/document/d/1SJw9dBfs3xheIzst_Fu3Fj5m4Z3bSM-gSLeg0iEpshA/edit?usp=sharing
+noinline_add: |-
+    https://cdn.discordapp.com/attachments/514431063221731338/908880959464685568/ShowMeWhatYaGot_AnimeEdition.png
