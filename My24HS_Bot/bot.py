@@ -250,7 +250,7 @@ class My24HSbot(Bot):
         embed.description = embed_description
         return command_info.get('raw_message'), embed, files_to_attach
 
-    async def handle_command(self, ctx: Context, noinline: (bool, None) = None):
+    async def handle_command(self, ctx: SlashContext, noinline: (bool, None) = None):
         self.logger.info('{} used /{} in #{}'.format(ctx.author, ctx.command, ctx.channel))
 
         # If the channel name the command was used in contains "commands" and the user hasn't specifically turned on
@@ -259,6 +259,8 @@ class My24HSbot(Bot):
             noinline = 'commands' in ctx.channel.name
 
         message, embed, attachments = self.get_command_resp(ctx.command, noinline)
+
+        await ctx.defer()
 
         async with ctx.channel.typing():
             if message or embed:
