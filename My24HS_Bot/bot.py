@@ -1,17 +1,18 @@
 import asyncio
-import discord
-import discord_slash
 import logging
 import os
 import traceback
-import yaml
-from discord import File, Message, Member, Guild, Embed, Activity, ActivityType
-from discord.ext.commands import Bot, Context
-from discord_slash import ButtonStyle, ComponentContext
-from discord_slash.utils.manage_commands import create_option
-from discord_slash.utils.manage_components import create_button, create_actionrow, wait_for_component
 from io import StringIO
 from typing import Union
+
+import discord
+import discord_slash
+import yaml
+from discord import File, Message, Member, Guild, Embed, Activity, ActivityType
+from discord.ext.commands import Bot
+from discord_slash import ButtonStyle, ComponentContext, SlashContext
+from discord_slash.utils.manage_commands import create_option
+from discord_slash.utils.manage_components import create_button, create_actionrow, wait_for_component
 
 from My24HS_Bot.const import commands_dir, sysinfo_allowed_roles, embed_color, attachments_dir
 from My24HS_Bot.util import handle_sysinfo, download_sysinfo
