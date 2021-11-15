@@ -54,6 +54,10 @@ class My24HSbot(Bot):
         # here should be fine
         sysinfo_attachment = message.attachments[0]
 
+        # For some reason some attachment files can just not have a file name?
+        if not sysinfo_attachment.filename:
+            return
+
         # Ignore non-text attachments and text attachments that aren't UTF-16
         if not sysinfo_attachment.filename.endswith('.txt') and not sysinfo_attachment.content_type.endswith('UTF-16'):
             return
