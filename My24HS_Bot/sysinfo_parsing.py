@@ -5,6 +5,7 @@ from discord import Embed
 from My24HS_Bot.const import w10_build_to_version, w11_build_to_version, embed_color, nvidia_driver_versions, \
     amd_driver_versions
 
+is_insider = 0
 
 class SysinfoParser:
     def __init__(self):
@@ -32,6 +33,9 @@ class SysinfoParser:
             return
 
         if not is_up_to_date:
+            if is_insider == 1:
+                self.add_info('Windows version', ':exclamation: Insider build? (Build {})'.format(windows_build))
+            return
             self.add_info('Windows version', ':x: Not up to date ({})'.format(current_version))
             self.quickfixes.description += '`/systemuptodate`\n - Update Windows\n'
             self.logger.info('Windows version {}, not up to date'.format(current_version))
@@ -102,14 +106,18 @@ class SysinfoParser:
 
 
 def build_version_check(build_num: str, build_to_version: dict) -> tuple[bool, str, str]:
+    latest_version_build = list(build_to_version.keys())[-1]
+    if int(build_num) > int(latest_version_build):
+        is_insider = 1
+        return False
     if build_num not in build_to_version:
         raise ValueError('The build number supplied ({}) does not exist'.format(build_num))
     version_name: str = build_to_version[build_num]
-    latest_version_build = list(build_to_version.keys())[-1]
     if build_num == latest_version_build:
         # If the latest build number and the supplied build number match, we can just
         # return the current version name as the most recent
         return True, version_name, version_name
+    
     return False, version_name, list(build_to_version.values())[-1]
 
 
@@ -119,7 +127,6 @@ def is_up_to_date_nvidia(gpu_name: str, driver_version: str) -> bool:
     # The professional driver is only an option if you're using a professional GPU
     if not any(name in gpu_name for name in ['Quadro', 'Tesla', 'Grid']):
         branches.pop('professional')
-
     return any(version == driver_version for version in branches.values())
 
 
