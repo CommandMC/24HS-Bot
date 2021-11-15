@@ -117,7 +117,7 @@ def is_up_to_date_nvidia(gpu_name: str, driver_version: str) -> bool:
     branches = nvidia_driver_versions.copy()
 
     # The professional driver is only an option if you're using a professional GPU
-    if not any(name in gpu_name for name in ['Quadro', 'Tesla', 'Grid']):
+    if not any(name in gpu_name for name in ['Quadro', 'Tesla', 'Grid', 'NVS']):
         branches.pop('professional')
 
     return any(version == driver_version for version in branches.values())
