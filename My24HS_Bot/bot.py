@@ -128,10 +128,14 @@ class My24HSbot(Bot):
                 await message.channel.send(
                     embed=quickdiagnosis
                 )
-            await message.channel.send(
-                content='Sysinfo file in UTF-8 encoding:',
-                file=File(fp=utf8_sysinfo, filename=filename)
-            )
+            # Check if the file size is more than 8MB
+            utf8_sysinfo.seek(0, os.SEEK_END)
+            if utf8_sysinfo.tell() <= 8000000:
+                utf8_sysinfo.seek(0)
+                await message.channel.send(
+                    content='Sysinfo file in UTF-8 encoding:',
+                    file=File(fp=utf8_sysinfo, filename=filename)
+                )
         self.logger.info('Parsed sysinfo file in #{} (sent by {})'.format(message.channel, message.author))
         await msg.delete()
 
