@@ -5,8 +5,6 @@ from discord import Embed
 from My24HS_Bot.const import w10_build_to_version, w11_build_to_version, embed_color, nvidia_driver_versions, \
     amd_driver_versions
 
-is_insider = 0
-
 class SysinfoParser:
     def __init__(self):
         self.info = Embed(
@@ -24,9 +22,9 @@ class SysinfoParser:
     def windows_version(self, os_name: str, windows_build: str):
         try:
             if os_name.startswith('Microsoft Windows 10'):
-                is_up_to_date, current_version, latest_version = build_version_check(windows_build, w10_build_to_version)
+                is_up_to_date, current_version, latest_version, is_insider = build_version_check(windows_build, w10_build_to_version)
             elif os_name.startswith('Microsoft Windows 11'):
-                is_up_to_date, current_version, latest_version = build_version_check(windows_build, w11_build_to_version)
+                is_up_to_date, current_version, latest_version, is_insider = build_version_check(windows_build, w11_build_to_version)
                 current_version = '**W11**-' + current_version
         except ValueError:
             self.add_info('Windows version', ':question: Unsure (Build {})'.format(windows_build))
@@ -105,20 +103,21 @@ class SysinfoParser:
         self.info.add_field(name=name, value=value)
 
 
-def build_version_check(build_num: str, build_to_version: dict) -> tuple[bool, str, str]:
+def build_version_check(build_num: str, build_to_version: dict) -> tuple[bool, str, str, int]:
+    is_insider = 0
     latest_version_build = list(build_to_version.keys())[-1]
     if int(build_num) > int(latest_version_build):
         is_insider = 1
-        return False
+        return False, 'Insider', 'Insider', is_insider
     if build_num not in build_to_version:
         raise ValueError('The build number supplied ({}) does not exist'.format(build_num))
     version_name: str = build_to_version[build_num]
     if build_num == latest_version_build:
         # If the latest build number and the supplied build number match, we can just
         # return the current version name as the most recent
-        return True, version_name, version_name
+        return True, version_name, version_name, is_insider
     
-    return False, version_name, list(build_to_version.values())[-1]
+    return False, version_name, list(build_to_version.values())[-1], is_insider
 
 
 def is_up_to_date_nvidia(gpu_name: str, driver_version: str) -> bool:
