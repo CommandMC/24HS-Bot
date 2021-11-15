@@ -53,7 +53,7 @@ def handle_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
     os_name = fd.readline().split('\t')[1]
     windows_version = fd.readline().split('\t')[1]
     windows_build = windows_version.split(' ')[-1]
-    parser.windows_version(os_name, windows_build)
+    parser.windows_version(os_name, int(windows_build))
 
     for i in range(3):
         fd.readline()

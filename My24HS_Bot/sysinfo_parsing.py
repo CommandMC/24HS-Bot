@@ -1,9 +1,18 @@
 import logging
+from dataclasses import dataclass
 
 from discord import Embed
 
 from My24HS_Bot.const import w10_build_to_version, w11_build_to_version, embed_color, nvidia_driver_versions, \
     amd_driver_versions
+
+
+@dataclass
+class WinVerInfo:
+    is_up_to_date: bool = False
+    current_version_name: str = ''
+    latest_version_name: str = ''
+    is_insider: bool = False
 
 
 class SysinfoParser:
@@ -19,25 +28,29 @@ class SysinfoParser:
         )
         self.logger = logging.getLogger('SysinfoParser')
 
-    # noinspection PyUnboundLocalVariable
-    def windows_version(self, os_name: str, windows_build: str):
+    def windows_version(self, os_name: str, windows_build: int):
         try:
-            if os_name.startswith('Microsoft Windows 10'):
-                is_up_to_date, current_version, latest_version = build_version_check(windows_build, w10_build_to_version)
-            elif os_name.startswith('Microsoft Windows 11'):
-                is_up_to_date, current_version, latest_version = build_version_check(windows_build, w11_build_to_version)
-                current_version = '**W11**-' + current_version
+            if os_name.startswith('Microsoft Windows 11'):
+                ver_info = build_version_check(windows_build, w11_build_to_version)
+                ver_info.current_version_name = '**W11**-' + ver_info.current_version_name
+            else:
+                ver_info = build_version_check(windows_build, w10_build_to_version)
         except ValueError:
-            self.add_info('Windows version', ':question: Unsure (Build {})'.format(windows_build))
+            self.add_info('Windows version', f':question: Unsure (Build {windows_build})')
             return
 
-        if not is_up_to_date:
-            self.add_info('Windows version', ':x: Not up to date ({})'.format(current_version))
+        if not ver_info.is_up_to_date:
+            self.add_info('Windows version', f':x: Not up to date ({ver_info.current_version_name})')
             self.quickfixes.description += '`/systemuptodate`\n - Update Windows\n'
-            self.logger.info('Windows version {}, not up to date'.format(current_version))
+            self.logger.info(f'Windows version {ver_info.current_version_name}, not up to date')
             return
-        self.add_info('Windows version', ':white_check_mark: Up to date ({})'.format(current_version))
-        self.logger.info('Windows version {}, up to date'.format(current_version))
+
+        if ver_info.is_insider:
+            self.add_info('Windows version', f':exclamation: Insider build? (Build {windows_build})')
+            return
+
+        self.add_info('Windows version', f':white_check_mark: Up to date ({ver_info.current_version_name})')
+        self.logger.info(f'Windows version {ver_info.current_version_name}, up to date')
 
     def ram_capacity(self, ram_capacity: str) -> int:
         ram_capacity = ram_capacity.replace(',', '.')
@@ -101,16 +114,26 @@ class SysinfoParser:
         self.info.add_field(name=name, value=value)
 
 
-def build_version_check(build_num: str, build_to_version: dict) -> tuple[bool, str, str]:
-    if build_num not in build_to_version:
-        raise ValueError('The build number supplied ({}) does not exist'.format(build_num))
-    version_name: str = build_to_version[build_num]
-    latest_version_build = list(build_to_version.keys())[-1]
-    if build_num == latest_version_build:
-        # If the latest build number and the supplied build number match, we can just
-        # return the current version name as the most recent
-        return True, version_name, version_name
-    return False, version_name, list(build_to_version.values())[-1]
+def build_version_check(build_num: int, build_to_version_name: dict) -> WinVerInfo:
+    ver_info = WinVerInfo()
+    latest_version_build = list(build_to_version_name.keys())[-1]
+    ver_info.latest_version_name = list(build_to_version_name.values())[-1]
+
+    if build_num not in build_to_version_name:
+        # If the build number is smaller than the latest build, we know it can't exist
+        if build_num < latest_version_build:
+            raise ValueError('The build number supplied ({}) does not exist'.format(build_num))
+        # If it's greater, it's probably an insider build
+        else:
+            ver_info.is_insider = True
+            ver_info.is_up_to_date = True
+    # If the build number is in the dict
+    else:
+        # Get the version name
+        ver_info.current_version_name = build_to_version_name[build_num]
+        # Check if it's up to date
+        ver_info.is_up_to_date = build_num == latest_version_build
+    return ver_info
 
 
 def is_up_to_date_nvidia(gpu_name: str, driver_version: str) -> bool:
