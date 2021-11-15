@@ -35,7 +35,7 @@ class SysinfoParser:
         if not is_up_to_date:
             if is_insider == 1:
                 self.add_info('Windows version', ':exclamation: Insider build? (Build {})'.format(windows_build))
-            return
+                return
             self.add_info('Windows version', ':x: Not up to date ({})'.format(current_version))
             self.quickfixes.description += '`/systemuptodate`\n - Update Windows\n'
             self.logger.info('Windows version {}, not up to date'.format(current_version))
