@@ -8,7 +8,7 @@ from typing import Union
 import discord
 import discord_slash
 import yaml
-from discord import File, Message, Member, Guild, Embed, Activity, ActivityType
+from discord import File, Message, Member, Guild, Embed, Activity, ActivityType, User
 from discord.ext.commands import Bot
 from discord_slash import ButtonStyle, ComponentContext, SlashContext
 from discord_slash.utils.manage_commands import create_option
@@ -178,6 +178,12 @@ class My24HSbot(Bot):
                         description='Disable inline links in message',
                         option_type=5,
                         required=False
+                    ),
+                    create_option(
+                        name='mention',
+                        description='Specify a user to ping with the command',
+                        option_type=6,
+                        required=False
                     )
                 ]
             )
@@ -258,7 +264,7 @@ class My24HSbot(Bot):
         embed.description = embed_description
         return command_info.get('raw_message'), embed, files_to_attach
 
-    async def handle_command(self, ctx: SlashContext, noinline: (bool, None) = None):
+    async def handle_command(self, ctx: SlashContext, noinline: bool = None, mention: User = None):
         self.logger.info('{} used /{} in #{}'.format(ctx.author, ctx.command, ctx.channel))
 
         # If the channel name the command was used in contains "commands" and the user hasn't specifically turned on
@@ -271,6 +277,9 @@ class My24HSbot(Bot):
         await ctx.defer()
 
         async with ctx.channel.typing():
+            if mention:
+                message = mention.mention + (f'\n{message}' if message else '')
+
             if message or embed:
                 await ctx.send(content=message, embed=embed)
 
