@@ -7,6 +7,7 @@ from discord import Color
 bot_token = 'INSERT_TOKEN_HERE'
 commands_dir = os.path.join(os.path.curdir, 'commands')
 attachments_dir = os.path.join(os.path.curdir, 'attachments')
+edit_mention = True
 # These roles are allowed to press the "Yes/No" buttons on the sysinfo prompt
 sysinfo_allowed_roles = [
     # Members in Nvidia

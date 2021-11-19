@@ -14,7 +14,7 @@ from discord_slash import ButtonStyle, ComponentContext, SlashContext
 from discord_slash.utils.manage_commands import create_option
 from discord_slash.utils.manage_components import create_button, create_actionrow, wait_for_component
 
-from My24HS_Bot.const import commands_dir, sysinfo_allowed_roles, embed_color, attachments_dir
+from My24HS_Bot.const import commands_dir, sysinfo_allowed_roles, embed_color, attachments_dir, edit_mention
 from My24HS_Bot.util import handle_sysinfo, download_sysinfo
 
 
@@ -277,11 +277,16 @@ class My24HSbot(Bot):
         await ctx.defer()
 
         async with ctx.channel.typing():
-            if mention:
-                message = mention.mention + (f'\n{message}' if message else '')
+            if not edit_mention:
+                if mention:
+                    message = mention.mention + (f'\n{message}' if message else '')
 
             if message or embed:
-                await ctx.send(content=message, embed=embed)
+                main_message = await ctx.send(content=message, embed=embed)
+                if edit_mention:
+                    if mention:
+                        message = mention.mention + (f'\n{message}' if message else '')
+                        await main_message.edit(content=message, embed=embed)
 
             # If we don't have attachments, we of course can't send any
             # If 'noinline' is set, the attachment links will already be in the original message
