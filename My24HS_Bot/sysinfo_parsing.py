@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from discord import Embed
 
 from My24HS_Bot.const import w10_build_to_version, w11_build_to_version, embed_color, nvidia_driver_versions, \
-    amd_driver_versions
+    amd_driver_versions, up_to_date_range
 
 
 @dataclass
@@ -131,8 +131,15 @@ def build_version_check(build_num: int, build_to_version_name: dict) -> WinVerIn
     else:
         # Get the version name
         ver_info.current_version_name = build_to_version_name[build_num]
-        # Check if it's up to date
-        ver_info.is_up_to_date = build_num == latest_version_build
+        # Get the index of the current version and the most recent version
+        current_ver_index = list(build_to_version_name.keys()).index(build_num)
+        latest_ver_index = list(build_to_version_name.keys()).index(latest_version_build)
+        # First off assume we're up to date
+        ver_info.is_up_to_date = True
+        # If the current version and the most up to date version are further apart than the specified amount (generally
+        # this is 0, but if a new version releases it might be 1), we're not up to date
+        if latest_ver_index - current_ver_index > up_to_date_range:
+            ver_info.is_up_to_date = False
     return ver_info
 
 
