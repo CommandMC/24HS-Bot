@@ -1,4 +1,5 @@
 description: Smartscreen complains about Automator
+has_inline: true
 message:
  - "If you see the 'Windows protected your PC, Microsoft Defender SmartScreen prevented and unrecognized app' warning when you ran the 24HS-Automator, this is nothing to be concerned about. If Windows Defender actually detected a virus then it wouldn't even show this, but instead block the download."
  - text: This warning happens when an app developer refuses to pay Microsoft's $600 a year license to make the warning go away 
