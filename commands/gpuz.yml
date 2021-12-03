@@ -1,5 +1,5 @@
 description: Person sends GPU-Z Lookup link
-has_inline: false
+has_inline: true
 message:
  - "To find out which specific GPU model you have, you can download GPU-Z "
  - text: here
