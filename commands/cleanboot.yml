@@ -4,5 +4,9 @@ message:
  - "If you want more information to clean boot to eliminate the possibility of third party processes causing an issue, follow "
  - text: this Wiki entry
    link: https://docs.google.com/document/d/1wPulQmcFLtTr0qNk-qf2uPjJbMlRpwutdK61ZvhJoqc/edit?usp=sharing
+ - |-
+    .
+    
+    Please read wiki by clicking the above hyperlink (blue text) before asking **"What is this?"** or **"Is this safe?"**   
 noinline_add: |-
     https://cdn.discordapp.com/attachments/514431063221731338/804178527451611156/remembertodothiscleanboot.png
