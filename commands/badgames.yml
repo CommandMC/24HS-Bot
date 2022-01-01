@@ -1,0 +1,16 @@
+description: List of games not to be used as benchmarks
+has_inline: false
+message:
+ - |-
+    You should NOT use the following games as benchmarks or to see if your PC has a problem.
+    
+    1. Escape from Tarkov
+    2. Valorant
+    3. Fortnite
+    4. Ark Survival
+    5. Cyberpunk 2077
+    6. Warzone
+    7. Dayz
+    8. PUBG
+    9. All Bethesda games
+ 
