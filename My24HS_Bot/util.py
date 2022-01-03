@@ -79,33 +79,24 @@ def handle_sysinfo(fd: StringIO) -> tuple[Embed, Embed]:
         fd.readline()
     # If the System Manufacturer or the System Model is deemed unknown/unhelpful, try to read out BaseBoard instead
     baseboard_manufacturer_line = fd.readline()
-    has_baseboard_info = baseboard_manufacturer_line.startswith('BaseBoard')
-    parser.logger.info('We do {}have BaseBoard info'.format('' if has_baseboard_info else 'not '))
     if system_manufacturer_unknown or system_model_unknown:
-        if has_baseboard_info:
-            if system_manufacturer_unknown:
-                baseboard_manufacturer = baseboard_manufacturer_line.split('\t')[1]
-                parser.add_info('System Manufacturer', baseboard_manufacturer)
-            if system_model_unknown:
-                baseboard_product = fd.readline().split('\t')[1]
-                parser.add_info('System Model', baseboard_product)
-            else:
-                fd.readline()
-            # Skip "BaseBoard-Version" and "Platform Role"
-            for i in range(2):
-                fd.readline()
-        # If we got no info with the system values, and we have no BaseBoard info, add "Unknown"
+        if system_manufacturer_unknown:
+            baseboard_manufacturer = baseboard_manufacturer_line.split('\t')[1]
+            parser.add_info('System Manufacturer', baseboard_manufacturer)
+        if system_model_unknown:
+            baseboard_product = fd.readline().split('\t')[1]
+            parser.add_info('System Model', baseboard_product)
         else:
-            parser.add_info('System Manufacturer', 'Unknown')
-            parser.add_info('System Model', 'Unknown')
+            fd.readline()
+        # Skip "BaseBoard-Version" and "Platform Role"
+        for i in range(2):
+            fd.readline()
         # And now we add the CPU and BIOS info
         parser.add_info('Processor', processor)
         parser.add_info('BIOS Version & Date', bios_info)
     else:
-        # If we have BaseBoard info (but don't need it), skip "Product", "Version", and "Platform Role"
-        if has_baseboard_info:
-            for i in range(3):
-                fd.readline()
+        for i in range(3):
+            fd.readline()
 
     # At this point, we should be at "Secure Boot State"
 
