@@ -38,7 +38,7 @@ def is_sysinfo(fd: StringIO) -> bool:
     os_name_line = fd.readline()
     fd.seek(0)
     try:
-        os_name = os_name_line.split('\t')[1]
+        os_name = os_name_line.split('\t')[1].replace('\u200f', '')
     # If we don't have a 2nd element (-> no tabs in line), we also know this can't be a sysinfo file
     except IndexError:
         return False
