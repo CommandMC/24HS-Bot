@@ -1,8 +1,8 @@
 description: Ling to wiki/installingwindows
 has_inline: true
 message:
- - "For information on how to install/reinstall Windows 10, keep your Windows license, making the USB bootable (from Windows, Linux, ChromeOS, Android and MacOS), and how to deal with partition errors while installing (such as GPT or EFI errors) please consult "
+ - "For information on how to install/reinstall Windows, keep your Windows license, making the USB bootable (from Windows, Linux or Android), and how to deal with partition errors while installing (such as GPT or EFI errors) please consult "
  - text: this Wiki entry
-   link: https://old.reddit.com/r/24hoursupport/wiki/installingwindows
+   link: https://docs.google.com/document/d/1rd4KAPnXsgvSdgPj7uKjGo4_K_2b6fITMOsGE3R34P4/edit?usp=sharing
 noinline_add: |-
     https://cdn.discordapp.com/attachments/514431063221731338/788539775262916618/4qibrc.png
