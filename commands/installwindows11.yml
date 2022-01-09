@@ -1,8 +1,1 @@
-description: Ling to wiki/installingwindows11
-has_inline: true
-message:
- - "For information on how to install/reinstall Windows 11, keep your Windows license, making the USB bootable (from Windows, Linux or Android), and how to deal with partition errors while installing (such as GPT or EFI errors) please consult "
- - text: this Wiki entry
-   link: https://docs.google.com/document/d/1w6BOfOZ0H43eM9qhBXkHDa6NSQTet0nvYJecfxMAsK4/edit?usp=sharing
-noinline_add: |-
-    https://cdn.discordapp.com/attachments/780461816563105812/895889612000616458/microsoftsucks.png
+copy_of: reinstallingwindows
