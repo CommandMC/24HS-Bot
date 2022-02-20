@@ -4,5 +4,17 @@ message:
  - "If you want more information on how to setup OBS to record all the time and use instant replay, follow "
  - text: this Wiki entry
    link: https://old.reddit.com/r/24hoursupport/wiki/obs
+ - |-
+    **But I want Shadowplay**: Read wiki
+    
+    **But I want instant replay/replay buffer**: Read wiki.
+    
+    **But OBS has bad performance**: Read wiki.
+    
+    **Can you just help me with Shadowplay?**: Read wiki.
+    
+    
+    
+      
 noinline_add: |-
     https://cdn.discordapp.com/attachments/514431063221731338/804179350374055997/4vlzpq.png
