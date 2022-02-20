@@ -1,0 +1,8 @@
+description: Link to latest NVIDIA driver redirect
+has_inline: true
+message:
+ - "Click"
+ - text: here to download latest NVIDIA driver
+   link: http://evernow.github.io
+noinline_add: |-
+    http://evernow.github.io
