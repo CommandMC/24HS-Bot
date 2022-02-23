@@ -7,7 +7,7 @@ message:
  
  
     TLDR: 
-    1. Start loggin with HWInfo (read above webpage on how to start)
+    1. Start logging with HWInfo (read above webpage on how to start)
     2. Wait until the issue happens again (just do whatever makes the issue happen)
     3. When the issue happens go back to HWInfo, stop log and send excel sheet here. Ideally tell us the time the issue happened if it's a long period of time so it's not so much trying to find a needle in a haystack
     
