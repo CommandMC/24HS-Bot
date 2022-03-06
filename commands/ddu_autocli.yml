@@ -1,4 +1,5 @@
 description: Instructions for AutoDDU_CLI
+has_inline: true
 message:
  - "For a utility to automate DDU as much as possible "
  - text: download this
