@@ -3,7 +3,7 @@ has_inline: true
 message:
  - "For a utility to automate DDU as much as possible "
  - text: download this
-   link: https://github.com/Evernow/AutoDDU_CLI/raw/main/dist/AutoDDU_CLI.exe
+   link: https://github.com/Evernow/AutoDDU_CLI/raw/main/signedexecutable/AutoDDU_CLI.exe
  - |-
     .
     
