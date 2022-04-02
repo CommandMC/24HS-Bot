@@ -1,7 +1,9 @@
 description: Instructions on disconnecting all drives
 message: |-
-    Disconnect all drives from your motherboard. This includes hard drives, SSDs, optical drives. Regardless if they're connected via SATA or M.2 ports. Remove all of them regardless if you know which drive has your OS, this is to prevent issues relating to potentially the bootloader being on a different drive and the fact that some motherboards will keep looking for an OS on some drives and stay on a black screen.
+    Disconnect all drives from your motherboard (while PC is off). This includes hard drives, SSDs, optical drives. Regardless if they're connected via SATA or M.2 ports. Remove all of them regardless if you know which drive has your OS, this is to prevent issues relating to potentially the bootloader being on a different drive and the fact that some motherboards will keep looking for an OS on some drives and stay on a black screen.
     
     If you have SATA drives, disconnecting the SATA data connector or the SATA power connector is enough, doesn't matter from which side (drive or motherboard)
     
     If you have M.2 drives, gotta remove it.
+    
+    Remove/Disconnect all drives with PC off.
