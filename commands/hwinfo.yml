@@ -7,9 +7,10 @@ message:
  
  
     TLDR: 
-    1. Start logging with HWInfo (read above webpage on how to start)
-    2. Wait until the issue happens again (just do whatever makes the issue happen)
-    3. When the issue happens go back to HWInfo, stop log and send excel sheet here. Ideally tell us the time the issue happened if it's a long period of time so it's not so much trying to find a needle in a haystack
+    1. Download HWInfo Portable from FossHub ( https://www.fosshub.com/HWiNFO.html ) not PAF Format
+    2. Start logging with HWInfo (read above webpage on how to start)
+    3. Wait until the issue happens again (just do whatever makes the issue happen)
+    4. When the issue happens go back to HWInfo, stop log and send excel sheet here. Ideally tell us the time the issue happened if it's a long period of time so it's not so much trying to find a needle in a haystack
     
 noinline_add: |-
    https://support.lumion.com/hc/en-us/articles/360021829573-How-do-you-provide-a-log-file-from-HWiNFO-
