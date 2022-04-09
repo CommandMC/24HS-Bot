@@ -1,6 +1,12 @@
 description: Link to wiki/obs
 has_inline: true
 message:
+ - |- 
+    **We do not provide support here for GeForce Experience/Shadowplay related issues.** The software is extremely unreliable and breaks for no apparent reason with no easily known fixes. As a result, it is not worth our time or effort to fix it.
+
+    The only recommendation you will get from regular assistants here is to use OBS.
+
+    Read the wiki entry for instructions on where to get help with anything related to GFE, such as Shadowplay.
  - "If you want more information on how to setup OBS to record all the time and use instant replay, follow "
  - text: this Wiki entry
    link: https://old.reddit.com/r/24hoursupport/wiki/obs
