@@ -1,0 +1,8 @@
+description: Link to 24HourSupport server
+has_inline: true
+message:
+ - "Click " 
+ - text: here for a Discord invite to 24HourSupport server
+   link: https://discord.gg/VS5wq89
+noinline_add: |-
+    https://discord.gg/VS5wq89
