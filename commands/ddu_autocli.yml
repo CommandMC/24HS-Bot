@@ -7,5 +7,5 @@ message:
  - |-
     .
     
-    Note that when it logs you into safe mode you need to launch AutoDDU_CLI.exe on the desktop, then once restarted back to your normal profile you wait for AutoDDU_CLI to launch by itself (may take a few minutes(
+    Note that when it logs you into safe mode you need to launch AutoDDU_CLI.exe on the desktop, then once restarted back to your normal profile you wait for AutoDDU_CLI to launch by itself (may take a few minutes)
     
