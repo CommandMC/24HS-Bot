@@ -3,6 +3,6 @@ has_inline: true
 message:
  - "For more information on why you shouldn't be using Windows 7, alternatives (even if you have performance and privacy concerns with Windows 10) and why we won't provide support for Windows 7, please consult "
  - text: this Wiki entry
-   link: https://old.reddit.com/r/24hoursupport/wiki/productstoavoid#wiki_windows_7
+   link: https://www.reddit.com/r/24hoursupport/wiki/productstoavoid#wiki_windows_7
 noinline_add: |-
     https://cdn.discordapp.com/attachments/370433380635901952/786742330606223380/annoyingdan.png

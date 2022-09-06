@@ -3,7 +3,7 @@ has_inline: true
 message:
  - "For what makes a good backup and how to start, see "
  - text: the /r/DataHoarder wiki on backups
-   link: https://old.reddit.com/r/DataHoarder/wiki/backups
+   link: https://www.reddit.com/r/DataHoarder/wiki/backups
 noinline_add: |-
     https://cdn.discordapp.com/attachments/514431063221731338/715037836465930301/DeepinScreenshot_select-area_20191218033823.png
     

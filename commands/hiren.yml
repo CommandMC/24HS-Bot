@@ -3,6 +3,6 @@ has_inline: true
 message:
  - "If you wish to use Hiren's to do any number of things such as scanning for malware, checking the health of your drives, recovering / resetting your Windows install password, or recovering your Windows license please consult "
  - text: this Wiki entry
-   link: https://old.reddit.com/r/24hoursupport/wiki/hirenguide
+   link: https://www.reddit.com/r/24hoursupport/wiki/hirenguide
 noinline_add: |-
     https://cdn.discordapp.com/attachments/514431063221731338/788535370064724018/4qi9a0.png

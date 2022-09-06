@@ -3,7 +3,7 @@ has_inline: true
 message:
  - "When a drive is dying, before attempting to directly recover your data (with utilities like testdisk or others mentioned "
  - text: here
-   link: https://old.reddit.com/r/24hoursupport/wiki/index#wiki_data_recovery
+   link: https://www.reddit.com/r/24hoursupport/wiki/index#wiki_data_recovery
  - |-
     ) one should create a copy of the potentially dying drive using a utility like ddrescue.
     
