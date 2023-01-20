@@ -22,18 +22,6 @@ raw_message: |-
 
     Then enter
 
-    Once the command is done, do this command again:
-
-    Type in:
-
-    `DISM  /Online  /Cleanup-Image  /RestoreHealth`
-               ^                  ^                               ^
-                        Spaces go here
-
-
-
-    Then enter
-
-    Once the command is done, restart your computer.
+    Once the command is done, if DISM failed with an error the first time run DISM again, afterwards restart your computer.
 
     https://i.imgur.com/mQuEgfI.png
