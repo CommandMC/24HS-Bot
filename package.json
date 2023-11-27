@@ -1,0 +1,30 @@
+{
+  "name": "24hsbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/index.js",
+  "scripts": {
+    "prestart": "npm run build",
+    "start": "node build/index.js",
+    "build": "esbuild src/index.ts --platform=node --bundle --target=node18 --outfile=build/index.js",
+    "dist": "npm run build && pkg --target node18 --output dist/24HS-Bot build/index.js --compress GZip",
+    "clean": "rm -rf build && rm -rf dist",
+    "codecheck": "tsc"
+  },
+  "author": "Mathis Dröge",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "discord.js": "^14.11.0",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.2.0",
+    "@typescript-eslint/parser": "^6.2.0",
+    "esbuild": "^0.19.8",
+    "eslint": "^8.46.0",
+    "eslint-config-prettier": "^9.0.0",
+    "pkg": "^5.8.1",
+    "prettier": "^3.0.0",
+    "typescript": "^5.1.6"
+  }
+}

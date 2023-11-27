@@ -1,0 +1,27 @@
+{
+  "env": {
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "plugin:@typescript-eslint/strict-type-checked",
+    "plugin:@typescript-eslint/stylistic-type-checked",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": true,
+    "tsconfigRootDir": "."
+  },
+  "plugins": ["@typescript-eslint"],
+  "root": true,
+  "overrides": [
+    {
+      "files": ["*.js"],
+      "extends": ["plugin:@typescript-eslint/disable-type-checked"]
+    }
+  ],
+  "rules": {
+    "@typescript-eslint/consistent-type-imports": "error"
+  }
+}

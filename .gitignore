@@ -1,0 +1,6 @@
+build
+dist
+node_modules
+.eslintcache
+bot_config.json
+commands.json
