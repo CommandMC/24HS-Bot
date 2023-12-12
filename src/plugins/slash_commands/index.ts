@@ -211,7 +211,7 @@ async function addOrModifyCommandFromModal(
   // Write the modified command list to disk
   await writeFile(
     COMMANDS_FILE,
-    JSON.stringify(Array.from(commands.values()), undefined, 2)
+    JSON.stringify({ commands: Array.from(commands.values()) }, undefined, 2)
   )
   return { submitInteraction: modalResponse, newCommand }
 }
