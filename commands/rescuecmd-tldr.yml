@@ -1,0 +1,8 @@
+description: Instructions for SFC/DISM and CHKDSK scans
+has_inline: true
+message:
+ - |-
+    - cmd.exe
+    - sfc /scannow
+    - dism /Online /Cleanup-Image /RestoreHealth
+    - chkdsk C: /r /x
