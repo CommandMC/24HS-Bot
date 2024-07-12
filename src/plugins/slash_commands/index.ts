@@ -107,7 +107,6 @@ function makeEmbeds(command: Command): APIEmbed[] {
 
   const embeds: APIEmbed[] = []
   embeds.length = embedsToAdd
-  embeds.fill({})
 
   // Add the description to the first embed
   const firstEmbed: APIEmbed = {}
@@ -116,9 +115,7 @@ function makeEmbeds(command: Command): APIEmbed[] {
 
   // Add images
   command.imageAttachments.forEach((imageUrl, index) => {
-    const currentEmbed = embeds[index]
-    // NOTE: This can't really happen (since the array is filled above)
-    if (!currentEmbed) return
+    const currentEmbed = embeds[index] ?? {}
     currentEmbed.image = { url: imageUrl }
     embeds[index] = currentEmbed
   })
